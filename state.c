@@ -7,6 +7,7 @@
 
 #define NUMBER_OF_RESULTS_PER_STATE 10
 #define NO_VOTES 0
+#define NUMBER_OF_FIELDS_TO_MAP 2
 
 struct State_t {
 	int stateId;
@@ -80,7 +81,7 @@ StateResult stateDestroy(State state) {
 }
 
 int getStateId(State state) {
-	if (!state) return 0;
+	if (!state) return -1;
 	return state->stateId;
 }
 
@@ -116,20 +117,22 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 	mapPut(stateGiver->stateVotes, stateTakerId, current - 1);
 }
 
-void sumResultsFromState(State state) {
-	Map reversedMap = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareIntsReversed);
-	/*creates a reverset map where every key element in the original map is inserted as data and vise versa
-	therefor we'll get a map sorted from biggest number of votes to the smallest */
-	MAP_FOREACH(int, stateId, state->stateVotes) {
-		mapPut(reversedMap, mapGet(state->stateVotes, stateId), stateId);
-	}
-	MapKeyElement givenVotes = mapGetFirst(reversedMap);
-	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE;  i++) {
-		(state->stateResults)[i] = mapGet(reversedMap, givenVotes);//we need to check what happens if two states got the same votes 
-		givenVotes = mapGetNext(reversedMap);
-	}
-	mapDestroy(reversedMap);
-}
+//void sumResultsFromState(State state) {
+//	Map reversedMap = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareIntsReversed);
+//	/*creates a reverset map where every key element in the original map is inserted as data and vise versa
+//	therefor we'll get a map sorted from biggest number of votes to the smallest */
+//	MAP_FOREACH(int, stateId, state->stateVotes) {
+//		mapPut(reversedMap, mapGet(state->stateVotes, stateId), stateId);
+//	}
+//	MapKeyElement givenVotes = mapGetFirst(reversedMap);
+//	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE;  i++) {
+//		(state->stateResults)[i] = mapGet(reversedMap, givenVotes);//we need to check what happens if two states got the same votes 
+//		givenVotes = mapGetNext(reversedMap);
+//	}
+//	mapDestroy(reversedMap);
+//}
+
+
 
 int* getAllResultsFromState(State state) {
 	if (!state) return NULL;

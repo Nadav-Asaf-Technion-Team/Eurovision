@@ -22,7 +22,7 @@ Eurovision eurovisionCreate() {
 static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
 	bool stateExist = false;
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
-		if (currentState->stateId == stateIdUnderCheck) {
+		if (getStateId(currentState)== stateIdUnderCheck) {
 			stateExist = true;
 		}
 		return stateExist;
@@ -68,7 +68,7 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 	if (isIdValid(stateId)) return EUROVISION_INVALID_ID;
 	/*end of input check*/
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
-		if (currentState->stateId == stateId) {
+		if (getStateId(currentState) == stateId) {
 			listRemoveCurrent(eurovision->statesList);
 			break;
 		}
@@ -80,12 +80,37 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 				removeAllVotesFromStateToState(currentState, stateId);
 			}
 			return EUROVISION_SUCCESS;
-
-			EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,
-				int stateTaker);
-
-			EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
-				int stateTaker);
-
 		}
+}
+
+static State getStateFromId(Eurovision eurovision, int stateId) {
+	LIST_FOREACH(State, currentState, eurovision->statesList) {
+		if (getStateId(currentState) == stateId) return currentState;
+	}
+}
+EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int stateTaker) {
+	/*input check*/
+	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
+	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
+		return EUROVISION_STATE_NOT_EXIST;
+	}
+	if (stateGiver == stateTaker) return EUROVISION_SAME_STATE;
+	/*end of input check*/
+	State stateElement = getStateFromId(eurovision, stateGiver); 
+	addVoteFromState(stateElement, stateTaker);
+	return EUROVISION_SUCCESS;
+}
+
+EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
+	int stateTaker){
+	/*input check*/
+	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
+	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
+	return EUROVISION_STATE_NOT_EXIST;
+	}
+	if (stateGiver == stateTaker) return EUROVISION_SAME_STATE;
+	/*end of input check*/
+	State stateElement = getStateFromId(eurovision, stateGiver); 
+	removeVoteFromState(stateElement, stateTaker);
+	return EUROVISION_SUCCESS;
 	}

@@ -36,7 +36,7 @@ StateResult stateDestroy(State state);
 Returns state ID
 @param state - state element whose ID you want
 @return -
-	NULL -  if NULL was given as state
+	-1 -  if NULL was given as state
 	stateId of state otherwise
 */
 int getStateId(State state);
@@ -55,7 +55,7 @@ const char* getStateName(State state);
 Returns states song name
 @param state - state element whose song name you want
 @return -
-	NULL if NULL was given as judge
+	NULL if NULL was given as state
 	songName of state otherwise
 */
 const char* getSongName(State state);
