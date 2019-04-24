@@ -94,6 +94,18 @@ const char* getSongName(State state) {
 	return state->songName;
 }
 
+State stateCopy(State state) {
+	if (state == NULL) return NULL;
+	int newId = getStateId(state);
+	const char* newSong = getSongName(state);
+	const char* newStateName = getStateName(state);
+	Map newVotes = mapCopy(state->stateVotes);
+	int* newResults = state->stateResults;
+	State newState = stateCreate(newId, newStateName, newSong);
+	newState->stateVotes = newVotes;
+	return newState;
+}
+
 void addVoteFromState(State stateGiver, int stateTakerId) {
 	int current = mapGet(stateGiver->stateVotes, stateTakerId);
 	mapPut(stateGiver->stateVotes, stateTakerId, current + 1);

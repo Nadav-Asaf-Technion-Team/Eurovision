@@ -43,7 +43,7 @@ JudgeResult copyResults(int* source, int* destination) {
 	return JUDGE_SUCCESS;
 }
 
-//no reason to use this + not working
+//no reason to use this
 Judge judgeCopy(Judge judge) {
 	if (judge == NULL) return NULL;
 	int newId = getJudgeId(judge);
