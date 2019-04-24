@@ -16,6 +16,7 @@ Judge judgeCreate(int judgeId, const char* judgeName, int* judgeResults) {
 }
 
 void judgeDestroy(Judge judge) {
+	//free(judge->judgeResults);
 	free(judge);
 }
 
@@ -47,7 +48,7 @@ Judge judgeCopy(Judge judge) {
 	if (judge == NULL) return NULL;
 	int newId = getJudgeId(judge);
 	const char* newName = getJudgeId(judge);
-	int newResults[STATES_TO_SCORE] = getJudgeResults;
+	int* newResults = judge->judgeResults;
 	Judge newJudge = judgeCreate(newId, newName, newResults);
 	return newJudge;
 }

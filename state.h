@@ -67,6 +67,8 @@ adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 */
 void addVoteFromState(State stateGiver, int stateTakerId);
 
+State stateCopy(State state);
+
 /**
 deducts 1 from the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to deduct a vote
