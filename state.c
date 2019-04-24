@@ -80,7 +80,7 @@ StateResult stateDestroy(State state) {
 }
 
 int getStateId(State state) {
-	if (!state) return NULL;
+	if (!state) return 0;
 	return state->stateId;
 }
 
@@ -95,24 +95,26 @@ const char* getSongName(State state) {
 }
 
 void addVoteFromState(State stateGiver, int stateTakerId) {
-	mapPut(stategiver->stateVotes, stateTakerId, ++mapGet(stategiver->stateVotes, stateTakerId));
+	int current = mapGet(stateGiver->stateVotes, stateTakerId);
+	mapPut(stateGiver->stateVotes, stateTakerId, current + 1);
 }
 
 void removeVoteFromState(State stateGiver, int stateTakerId) {
-	mapPut(stategiver->stateVotes, stateTakerId, --mapGet(stategiver->stateVotes, stateTakerId));
+	int current = mapGet(stateGiver->stateVotes, stateTakerId);
+	mapPut(stateGiver->stateVotes, stateTakerId, current - 1);
 }
 
 void sumResultsFromState(State state) {
-	map reversedMap = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareIntsReversed);
+	Map reversedMap = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareIntsReversed);
 	/*creates a reverset map where every key element in the original map is inserted as data and vise versa
 	therefor we'll get a map sorted from biggest number of votes to the smallest */
 	MAP_FOREACH(int, stateId, state->stateVotes) {
 		mapPut(reversedMap, mapGet(state->stateVotes, stateId), stateId);
 	}
-	MapKeyElement givenvotes = mapGetFirst(reversedMap);
-	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE, i++) {
+	MapKeyElement givenVotes = mapGetFirst(reversedMap);
+	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE;  i++) {
 		(state->stateResults)[i] = mapGet(reversedMap, givenVotes);//we need to check what happens if two states got the same votes 
-		givenvotes = mapGetNext(reveredMap);
+		givenVotes = mapGetNext(reversedMap);
 	}
 	mapDestroy(reversedMap);
 }
@@ -123,21 +125,34 @@ int* getAllResultsFromState(State state) {
 }
 
 int getResultFromStateToState(State stateGiver, int stateTakerId) {
-	switch (stateTakerId)
-	{
-	case (stateGiver->stateResults)[0]: return 12;
-	case (stateGiver->stateResults)[1]: return 10;
-	case (stateGiver->stateResults)[2]: return 8;
-	case (stateGiver->stateResults)[3]: return 7;
-	case (stateGiver->stateResults)[4]: return 6;
-	case (stateGiver->stateResults)[5]: return 5;
-	case (stateGiver->stateResults)[6]: return 4;
-	case (stateGiver->stateResults)[7]: return 3;
-	case (stateGiver->stateResults)[8]: return 2;
-	case (stateGiver->stateResults)[9]: return 1;
-	default: return 0;
-		break;
+	if (stateGiver == NULL) return -1;
+	int* results = stateGiver->stateResults;
+	bool inArray = false;
+	int index = 0;
+	for (index = 0; index < NUMBER_OF_RESULTS_PER_STATE; index++) {
+		if (results[index] = stateTakerId) {
+			inArray = true;
+			break;
+		}
 	}
+	if (!inArray) return 0;
+	else {
+		switch (index)
+		{
+		case 0: return 12;
+		case 1:	return 10;
+		case 2: return 8;
+		case 3: return 7;
+		case 4: return 6;
+		case 5: return 5;
+		case 6: return 4;
+		case 7: return 3;
+		case 8: return 2;
+		case 9: return 1;
+		default: break;
+		}
+	}
+	return 0;
 }
 
 int getVoteFromStateToState(State stateGiver, int stateTakerId) {
@@ -146,7 +161,7 @@ int getVoteFromStateToState(State stateGiver, int stateTakerId) {
 	return votes;
 }
 
-StateResult removeVoteFromState(state stateGiver, int stateTakerId) {
+StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId) {
 	MapResult result = mapRemove(stateGiver->stateVotes, stateTakerId);
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
 	else if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;

@@ -20,7 +20,7 @@ void judgeDestroy(Judge judge) {
 }
 
 int getJudgeId(Judge judge) {
-	if (judge == NULL) return NULL;
+	if (judge == NULL) return 0;
 	return judge->judgeId;
 }
 
@@ -67,7 +67,6 @@ int getVoteFromJudge(Judge judge, int stateId) {
 	else {
 		switch (index)
 		{
-		default: break;
 		case 0: return 12;
 		case 1:	return 10;
 		case 2: return 8;
@@ -78,6 +77,7 @@ int getVoteFromJudge(Judge judge, int stateId) {
 		case 7: return 3;
 		case 8: return 2;
 		case 9: return 1;
+		default: break;
 		}
 	}
 	return 0;

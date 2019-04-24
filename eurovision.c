@@ -24,25 +24,28 @@ static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
 		}
 		return stateExist;
 	}
+}
+
 static bool isNameValid(const char *Name) {
-	char* charCheck = stateName;
+	const char* charCheck = Name;
 	int i = 0;
 	while (charCheck) {
 		if ((*(charCheck + i) < 'a' || *(charCheck + i) > 'z') && (*(charCheck + i) != ' ')) {
 			return false;
 		}
+		i++;
 	}
 	return true;
 }
-static bool isIdValid(int StateId) {
-	if (stateId < 0) reutrn false;
+static bool isIdValid(int stateId) {
+	if (stateId < 0) return false;
 	return true;
 }
 
 EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const char *stateName, const char *songName) {
 	/*input check*/
 	if (!eurovision || !stateId || !stateName || !songName) return EUROVISION_NULL_ARGUMENT; //check if needed
-	if (!isNameValid(stateId)) return EUROVISION_INVALID_ID;
+	if (!isIdValid(stateId)) return EUROVISION_INVALID_ID;
 	if (stateExist(eurovision, stateId)) return EUROVISION_STATE_ALREADY_EXIST;
 	if (!isNameValid(stateName) || !isNameValid(songName)) return EUROVISION_INVALID_NAME;
 	/*end of input check*/
@@ -66,19 +69,20 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 			listRemoveCurrent(eurovision->statesList);
 			break;
 		}
-	//we need to check for a jugde that gave points to this state, and remove him, will be done 
-	//	provided the proper function
-	LIST_FOREACH(State, currentState, eurovision->statesList) {
-		if (getVoteFromStateToState(currentState, stateId)) {
-			removeVoteFromState(currentState, stateId);	
+	}
+		//we need to check for a jugde that gave points to this state, and remove him, will be done 
+		//	provided the proper function
+		LIST_FOREACH(State, currentState, eurovision->statesList) {
+			if (getVoteFromStateToState(currentState, stateId)) {
+				removeAllVotesFromStateToState(currentState, stateId);
+			}
+			return EUROVISION_SUCCESS;
+
+			EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,
+				int stateTaker);
+
+			EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
+				int stateTaker);
+
 		}
-	return EUROVISION_SUCCESS;
-
-	EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,
-		int stateTaker);
-
-	EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
-		int stateTaker);
-
-}
-	
+	}

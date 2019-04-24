@@ -118,7 +118,8 @@ removes all votes from stateGiver to stateTakerId
 	STATE_NULL_ARGUMENT - will be returned if NULL was given as stateGiver or stateTaker
 	STATE_NOT_EXIST - will be returned if no votes were given in the first place
 	returns STATE_SUCCESS otherwise
-*/StateResult removeVoteFromState(state stateGiver, int stateTakerId):
+*/
+StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId);
 
 
 #endif /* STATE_H_ */

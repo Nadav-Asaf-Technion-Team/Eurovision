@@ -17,7 +17,7 @@ typedef enum eurovisionResult_t {
 } EurovisionResult;
 
 
-typedef struct eurovision_t* Eurovision;
+typedef struct Eurovision_t* Eurovision;
 
 Eurovision eurovisionCreate(); //Asaf
 
