@@ -11,6 +11,7 @@ struct Eurovision_t {
 int getAmountOfJudges(Eurovision eurovision) {
 	return listGetSize(eurovision->judgesList);
 }
+//_______________end oftest functions___________
 
 static bool isIdValid(int id) {
 	if (id < 0) return false;
