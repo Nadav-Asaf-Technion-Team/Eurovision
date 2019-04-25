@@ -16,7 +16,7 @@ Judge judgeCreate(int judgeId, const char* judgeName, int* judgeResults) {
 }
 
 void judgeDestroy(Judge judge) {
-	//free(judge->judgeResults);
+	free(judge->judgeResults);
 	free(judge);
 }
 
@@ -44,6 +44,7 @@ JudgeResult copyResults(int* source, int* destination) {
 }
 
 //no reason to use this
+//TODO: copy results array with malloc. 
 Judge judgeCopy(Judge judge) {
 	if (judge == NULL) return NULL;
 	int newId = getJudgeId(judge);

@@ -8,26 +8,63 @@ struct Eurovision_t {
 	List judgesList;
 };
 
+static bool isIdValid(int id) {
+	if (id < 0) return false;
+	return true;
+}
+
+static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
+	bool stateExist = false;
+	LIST_FOREACH(State, currentState, eurovision->statesList) {
+		if (getStateId(currentState) == stateIdUnderCheck) {
+			stateExist = true;
+		}
+		return stateExist;
+	}
+}
+
 Eurovision eurovisionCreate() {
 	Eurovision eurovision = malloc(sizeof(*eurovision));
+	if (eurovision == NULL) return NULL;
 	eurovision->statesList = listCreate(stateCopy, stateDestroy);
 	eurovision->judgesList = listCreate(judgeCopy, judgeDestroy);
 	return eurovision;
+}
+
+void eurovisionDestroy(Eurovision eurovision) {
+	listDestroy(eurovision->statesList);
+	listDestroy(eurovision->judgesList);
+	free(eurovision);
+}
+
+EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
+	const char* judgeName,
+	int* judgeResults) {
+	//TODO: check for null arguments
+	//TODO: create judgeExist function and check if judge exists.
+	if (!isIdValid(judgeId)) return EUROVISION_INVALID_ID;
+	if (!isNameValid(judgeName)) return EUROVISION_INVALID_NAME;
+	int* newResults = malloc(sizeof(int) * STATES_TO_SCORE);
+	if (newResults == NULL) return EUROVISION_OUT_OF_MEMORY;
+	for (int i = 0; i < STATES_TO_SCORE; i++) {
+		if (!isIdValid(judgeResults[i])) return EUROVISION_INVALID_ID;
+		else if (!stateExist(eurovision, judgeResults[i])) return EUROVISION_STATE_NOT_EXIST;
+		else {
+			newResults[i] = judgeResults[i];
+		}
+	}
+	Judge judge = judgeCreate(judgeId, judgeName, judgeResults);
+	listInsertLast(eurovision->judgesList, judge);
+}
+
+EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
+
 }
 
 //we need to check if its best to implimant the list of states as a map maybe
 //also we need to confirm that LIST_FOREACH works as expected
 
 // static function that runs throuhgt the list of states and checks if a spesific id exists 
-static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
-	bool stateExist = false;
-	LIST_FOREACH(State, currentState, eurovision->statesList) {
-		if (getStateId(currentState)== stateIdUnderCheck) {
-			stateExist = true;
-		}
-		return stateExist;
-	}
-}
 
 static bool isNameValid(const char *Name) {
 	const char* charCheck = Name;
@@ -38,10 +75,6 @@ static bool isNameValid(const char *Name) {
 		}
 		i++;
 	}
-	return true;
-}
-static bool isIdValid(int stateId) {
-	if (stateId < 0) return false;
 	return true;
 }
 
