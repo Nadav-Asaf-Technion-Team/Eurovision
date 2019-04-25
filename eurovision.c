@@ -74,7 +74,17 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 }
 
 EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
-
+	if (!isIdValid(judgeId)) return EUROVISION_INVALID_ID;
+	if (!judgeExist(eurovision, judgeId)) return EUROVISION_JUDGE_NOT_EXIST;
+	Judge toRemove = NULL;
+	LIST_FOREACH(Judge, currentJudge, eurovision->judgesList) {
+		if (getJudgeId(currentJudge) == judgeId) {
+			toRemove = currentJudge;
+			listRemoveCurrent(eurovision->judgesList);
+			judgeDestroy(toRemove);
+		}
+	}
+	return EUROVISION_SUCCESS;
 }
 
 //we need to check if its best to implimant the list of states as a map maybe
