@@ -19,6 +19,11 @@ typedef enum eurovisionResult_t {
 
 typedef struct Eurovision_t* Eurovision;
 
+//_______________test functions_________________
+int getAmountOfJudges(Eurovision eurovision);
+
+//_______________end of test functions_________
+
 Eurovision eurovisionCreate(); //Asaf
 
 void eurovisionDestroy(Eurovision eurovision); //Asaf
