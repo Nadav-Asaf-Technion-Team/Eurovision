@@ -69,7 +69,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 		}
 	}
 	Judge judge = judgeCreate(judgeId, judgeName, newResults);
-	listInsertLast(eurovision->judgesList, judge);
+	if (listInsertLast(eurovision->judgesList, judge) != LIST_SUCCESS) return EUROVISION_OUT_OF_MEMORY;
 	return EUROVISION_SUCCESS;
 }
 
