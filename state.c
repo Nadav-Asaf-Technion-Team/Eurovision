@@ -117,20 +117,17 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 	mapPut(stateGiver->stateVotes, stateTakerId, current - 1);
 }
 
-//void sumResultsFromState(State state) {
-//	Map reversedMap = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareIntsReversed);
-//	/*creates a reverset map where every key element in the original map is inserted as data and vise versa
-//	therefor we'll get a map sorted from biggest number of votes to the smallest */
-//	MAP_FOREACH(int, stateId, state->stateVotes) {
-//		mapPut(reversedMap, mapGet(state->stateVotes, stateId), stateId);
-//	}
-//	MapKeyElement givenVotes = mapGetFirst(reversedMap);
-//	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE;  i++) {
-//		(state->stateResults)[i] = mapGet(reversedMap, givenVotes);//we need to check what happens if two states got the same votes 
-//		givenVotes = mapGetNext(reversedMap);
-//	}
-//	mapDestroy(reversedMap);
-//}
+
+//under check
+void sumResultsFromState(State state) {
+	//mapSortByKey(state->stateVotes);
+	//mapSortByData(state->stateVotes);
+	MapKeyElement iterator = mapGetFirst(state->stateVotes);
+	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
+		(state->stateResults)[i] = mapGet(state->stateVotes, iterator);
+		iterator = mapGetNext(state->stateVotes);
+	}
+}
 
 
 
