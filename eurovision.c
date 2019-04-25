@@ -69,7 +69,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	if (newResults == NULL) return EUROVISION_OUT_OF_MEMORY;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		if (!isIdValid(judgeResults[i])) return EUROVISION_INVALID_ID;
-		else if (!stateExist(eurovision, judgeResults[i])) return EUROVISION_STATE_NOT_EXIST;
+		//else if (!stateExist(eurovision, judgeResults[i])) return EUROVISION_STATE_NOT_EXIST;
 		else {
 			newResults[i] = judgeResults[i];
 		}

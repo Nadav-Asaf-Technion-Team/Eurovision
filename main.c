@@ -10,6 +10,8 @@ int main() {
 		printf("an error has occured\n");
 		return 1;
 	}
-	else printf("number of judges is %d", getAmountOfJudges(eurovision));
+	else printf("number of judges is %d\n", getAmountOfJudges(eurovision));
+	eurovisionRemoveJudge(eurovision, 55);
+	printf("number of judges is %d", getAmountOfJudges(eurovision));
 	return 0;
 }
