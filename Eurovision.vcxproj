@@ -30,7 +30,11 @@
     <ClCompile Include="eurovision.c" />
     <ClCompile Include="judge.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="map.c" />
     <ClCompile Include="state.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libmtm.a" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

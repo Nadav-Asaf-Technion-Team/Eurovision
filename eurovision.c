@@ -1,7 +1,6 @@
 #include "eurovision.h"
 #include "judge.h"
 #include "state.h"
-#include <stdbool.h>
 
 struct Eurovision_t {
 	List statesList;
@@ -13,14 +12,30 @@ static bool isIdValid(int id) {
 	return true;
 }
 
-static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
-	bool stateExist = false;
-	LIST_FOREACH(State, currentState, eurovision->statesList) {
-		if (getStateId(currentState) == stateIdUnderCheck) {
-			stateExist = true;
+static bool isNameValid(const char* Name) {
+	const char* charCheck = Name;
+	int i = 0;
+	while (charCheck) {
+		if ((*(charCheck + i) < 'a' || *(charCheck + i) > 'z') && (*(charCheck + i) != ' ')) {
+			return false;
 		}
-		return stateExist;
+		i++;
 	}
+	return true;
+}
+
+static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
+	LIST_FOREACH(State, currentState, eurovision->statesList) {
+		if (getStateId(currentState) == stateIdUnderCheck) return true;
+	}
+	return false;
+}
+
+static bool judgeExist(Eurovision eurovision, int judgeId) {
+	LIST_FOREACH(Judge, currentJudge, eurovision->judgesList) {
+		if (getJudgeId(currentJudge) == judgeId) return true;
+	}
+	return false;
 }
 
 Eurovision eurovisionCreate() {
@@ -40,8 +55,8 @@ void eurovisionDestroy(Eurovision eurovision) {
 EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	const char* judgeName,
 	int* judgeResults) {
-	//TODO: check for null arguments
-	//TODO: create judgeExist function and check if judge exists.
+	if (eurovision == NULL || judgeName == NULL) return EUROVISION_NULL_ARGUMENT;
+	if (judgeExist(eurovision, judgeId)) return EUROVISION_JUDGE_ALREADY_EXIST;
 	if (!isIdValid(judgeId)) return EUROVISION_INVALID_ID;
 	if (!isNameValid(judgeName)) return EUROVISION_INVALID_NAME;
 	int* newResults = malloc(sizeof(int) * STATES_TO_SCORE);
@@ -53,8 +68,9 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 			newResults[i] = judgeResults[i];
 		}
 	}
-	Judge judge = judgeCreate(judgeId, judgeName, judgeResults);
+	Judge judge = judgeCreate(judgeId, judgeName, newResults);
 	listInsertLast(eurovision->judgesList, judge);
+	return EUROVISION_SUCCESS;
 }
 
 EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
@@ -63,20 +79,6 @@ EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
 
 //we need to check if its best to implimant the list of states as a map maybe
 //also we need to confirm that LIST_FOREACH works as expected
-
-// static function that runs throuhgt the list of states and checks if a spesific id exists 
-
-static bool isNameValid(const char *Name) {
-	const char* charCheck = Name;
-	int i = 0;
-	while (charCheck) {
-		if ((*(charCheck + i) < 'a' || *(charCheck + i) > 'z') && (*(charCheck + i) != ' ')) {
-			return false;
-		}
-		i++;
-	}
-	return true;
-}
 
 EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const char *stateName, const char *songName) {
 	/*input check*/

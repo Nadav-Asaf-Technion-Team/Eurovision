@@ -47,5 +47,13 @@
     <ClCompile Include="judge.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="map.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libmtm.a">
+      <Filter>Resource Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>
