@@ -123,6 +123,7 @@ static State getStateFromId(Eurovision eurovision, int stateId) {
 }
 EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int stateTaker) {
 	/*input check*/
+	if (!eurovision || !stateGiver || !stateTaker) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
 	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
 		return EUROVISION_STATE_NOT_EXIST;
@@ -137,13 +138,14 @@ EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int sta
 EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	int stateTaker){
 	/*input check*/
+	if (!eurovision || !stateGiver || !stateTaker) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
 	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
-	return EUROVISION_STATE_NOT_EXIST;
+		return EUROVISION_STATE_NOT_EXIST;
 	}
 	if (stateGiver == stateTaker) return EUROVISION_SAME_STATE;
 	/*end of input check*/
 	State stateElement = getStateFromId(eurovision, stateGiver); 
 	removeVoteFromState(stateElement, stateTaker);
 	return EUROVISION_SUCCESS;
-	}
+}
