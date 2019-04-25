@@ -6,7 +6,7 @@
 int main() {
 	Eurovision eurovision = eurovisionCreate();
 	int results[10] = { 101, 102, 103, 104, 105 };
-	if (eurovisionAddJudge(eurovision, 55, "John", results) != EUROVISION_SUCCESS) {
+	if (eurovisionAddJudge(eurovision, 55, "John", results) != EUROVISION_INVALID_NAME) {
 		printf("an error has occured\n");
 		return 1;
 	}

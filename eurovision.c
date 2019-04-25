@@ -20,7 +20,7 @@ static bool isIdValid(int id) {
 static bool isNameValid(const char* Name) {
 	const char* charCheck = Name;
 	int i = 0;
-	while (charCheck) {
+	while (*(charCheck + i)) {
 		if ((*(charCheck + i) < 'a' || *(charCheck + i) > 'z') && (*(charCheck + i) != ' ')) {
 			return false;
 		}
