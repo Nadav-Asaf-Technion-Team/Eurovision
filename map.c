@@ -217,3 +217,46 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
     return nodeRemove(map, searchByKey(map, keyElement)) ;
 }
 
+//================for eurovision use only====================
+static void mapBubble(Map map, Node firstNode, Node secondNode) {
+	if (!map || !firstNode || !secondNode) return NULL;
+	Node previous = map->head;
+	while (previous) {
+		if (previous->next == firstNode) break;
+		previous = previous->next;
+	}
+	previous->next = secondNode;
+	firstNode->next = secondNode->next;
+	secondNode->next = firstNode;
+}
+
+void MapSortByKey(Map map) {
+	Node node = mapGetFirst(map);
+	int iterationSize = mapGetSize(map);
+	for (int i = 0; i < mapGetSize(map); i++) {
+		node = mapGetFirst(map);
+		for (int j = 0; j < iterationSize; j++) {
+			if (map->compareKeyElements(mapGetNext(node), node) < 0) {
+				mapBubble(map, node, mapGetNext(node));
+			}
+			node = mapGetNext(node);
+		}
+		iterationSize--;
+	}
+}
+
+void MapSortByDataForInt(Map map) {
+	Node node = mapGetFirst(map);
+	int iterationSize = mapGetSize(map);
+	for (int i = 0; i < mapGetSize(map); i++) {
+		node = mapGetFirst(map);
+		for (int j = 0; j < iterationSize; j++) {
+			if (map->compareKeyElements(mapGetNext(node), node) < 0) {
+				mapBubble(map, node, mapGetNext(node));
+			}
+			node = mapGetNext(node);
+		}
+		iterationSize--;
+	}
+}
+//================end of for eurovision use only====================

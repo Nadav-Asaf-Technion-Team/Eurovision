@@ -208,3 +208,7 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	if (listSort(rank, compareStatesByScore) == NULL) return EUROVISION_OUT_OF_MEMORY;
 	return rank;
 }
+
+List eurovisionRunAudienceFavorite(Eurovision eurovision) {
+	 
+}
