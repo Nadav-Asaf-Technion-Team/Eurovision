@@ -91,6 +91,9 @@ Map mapCopy(Map map) {
 							map->freeDataElement,
 							map->freeKeyElement,
 							map->compareKeyElements);
+	if (mapGetSize(map) == 0) {
+		return map_cpy;
+	}
 	map_cpy->head = copyNode(map->head, map->copyDataElement, map->copyKeyElement);
 	map_cpy->size = map->size;
 	Node old_list_ptr = map->head->next;
