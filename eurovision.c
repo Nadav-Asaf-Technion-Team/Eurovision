@@ -187,6 +187,7 @@ EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 }
 
 List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
+	if (eurovision == NULL || audiencePercent < 1 || audiencePercent > 100) return NULL;
 	int audienceTotal = 0, judgesTotal = 0, audienceAvarage = 0, judgesAvarage = 0;
 	int totalStateScore = 0;
 	List rank = listCopy(eurovision->statesList);
