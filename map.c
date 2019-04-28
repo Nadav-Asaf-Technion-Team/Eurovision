@@ -91,6 +91,9 @@ Map mapCopy(Map map) {
 							map->freeDataElement,
 							map->freeKeyElement,
 							map->compareKeyElements);
+	if (mapGetSize(map) == 0) {
+		return map_cpy;
+	}
 	map_cpy->head = copyNode(map->head, map->copyDataElement, map->copyKeyElement);
 	map_cpy->size = map->size;
 	Node old_list_ptr = map->head->next;
@@ -142,7 +145,8 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
 	if (mapContains(map, keyElement)) {
-		searchByKey(map, keyElement)->data_element = dataElement_cpy;
+		Node node = searchByKey(map, keyElement);
+		node->data_element = dataElement_cpy;
 		return MAP_SUCCESS;
 	}
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);
@@ -151,6 +155,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 		return MAP_OUT_OF_MEMORY;
 	}
 	Node new_node = createNode(dataElement_cpy, keyElement_cpy, NULL);
+	//if map is empty
 	if (mapGetSize(map) == 0) {
 		map->head = new_node;
 		map->size++;

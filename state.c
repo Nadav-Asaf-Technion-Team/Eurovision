@@ -109,19 +109,12 @@ static StateResult copyStateResults(int* destination, int* source) {
 }
 State stateCopy(State state) {
 	if (state == NULL) return NULL;
-	printf("\nafter if\n");
 	int newId = getStateId(state);
-	printf("after id\n");
 	const char* newSong = getSongName(state);
-	printf("after song\n");
 	const char* newStateName = getStateName(state);
-	printf("after name\n");
 	Map newVotes = mapCopy(state->stateVotes);
-	printf("after map\n");
 	int* newResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
-	printf("after results\n");
 	if (copyStateResults(newResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
-	printf("after copyresults\n");
 	State newState = stateCreate(newId, newStateName, newSong);
 	newState->stateVotes = newVotes;
 	newState->stateResults = newResults;
@@ -129,15 +122,24 @@ State stateCopy(State state) {
 }
 
 void addVoteFromState(State stateGiver, int stateTakerId) {
-	int current = mapGet(stateGiver->stateVotes, stateTakerId);
-	mapPut(stateGiver->stateVotes, stateTakerId, current + 1);
+	int current = 0;
+	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
+		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
+		current++;
+	}
+	else current = 1;
+	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
 
 void removeVoteFromState(State stateGiver, int stateTakerId) {
-	int current = mapGet(stateGiver->stateVotes, stateTakerId);
-	mapPut(stateGiver->stateVotes, stateTakerId, current - 1);
+	int current = 0;
+	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
+		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
+		current--;
+	}
+	else current = 0;
+	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
-
 
 //under check
 void sumResultsFromState(State state) {
@@ -183,13 +185,14 @@ int getResultFromStateToState(State stateGiver, int stateTakerId) {
 }
 
 int getVoteFromStateToState(State stateGiver, int stateTakerId) {
-	int votes = mapGet(stateGiver->stateVotes, stateTakerId);
+	int votes = mapGet(stateGiver->stateVotes, &stateTakerId);
 	if (votes == NULL) return NO_VOTES;
-	return votes;
+	return *(int*)votes;
 }
 
 StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId) {
 	MapResult result = mapRemove(stateGiver->stateVotes, stateTakerId);
+	printf("check\n");
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
 	else if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;
 	return STATE_SUCCESS;
