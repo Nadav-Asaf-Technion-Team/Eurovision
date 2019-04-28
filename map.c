@@ -213,8 +213,6 @@ static MapResult nodeRemove (Map map, Node node){
 
 MapResult mapRemove(Map map, MapKeyElement keyElement){
     if (!(map && keyElement)) return MAP_NULL_ARGUMENT;
-	printf("\nnadav\n");
-
     Node node = searchByKey(map,keyElement);
 	if (!node) return MAP_ITEM_DOES_NOT_EXIST;
 	map->size--;
