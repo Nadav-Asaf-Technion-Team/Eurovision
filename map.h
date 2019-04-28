@@ -241,6 +241,7 @@ static void mapBubble(Map map, Node firstNode, Node secondNode);
 void MapSortByKey(Map map);
 void MapSortByDataForInt(Map map);
 //===========================================================
+
 #define MAP_FOREACH(type, iterator, map) \
     for(type iterator = (type) mapGetFirst(map) ; \
         iterator ;\
