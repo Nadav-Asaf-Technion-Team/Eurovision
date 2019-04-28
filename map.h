@@ -235,6 +235,12 @@ MapResult mapClear(Map map);
 * Macro for iterating over a map.
 * Declares a new iterator for the loop.
 */
+
+//================for eurovision use only====================
+static void mapBubble(Map map, Node firstNode, Node secondNode);
+void MapSortByKey(Map map);
+void MapSortByDataForInt(Map map);
+//===========================================================
 #define MAP_FOREACH(type, iterator, map) \
     for(type iterator = (type) mapGetFirst(map) ; \
         iterator ;\
