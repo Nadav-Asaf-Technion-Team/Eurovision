@@ -191,6 +191,7 @@ int getVoteFromStateToState(State stateGiver, int stateTakerId) {
 }
 
 StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId) {
+	printf("check1");
 	MapResult result = mapRemove(stateGiver->stateVotes, stateTakerId);
 	printf("check\n");
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
