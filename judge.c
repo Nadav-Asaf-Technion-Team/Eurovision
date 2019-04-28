@@ -35,7 +35,7 @@ int* getJudgeResults(Judge judge) {
 	return judge->judgeResults;
 }
 
-JudgeResult copyResults(int* destination, int* source) {
+static JudgeResult copyJudgesResults(int* destination, int* source) {
 	if (source == NULL || destination == NULL) return JUDGE_NULL_ARGUMENT;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		destination[i] = source[i];
@@ -50,7 +50,7 @@ Judge judgeCopy(Judge judge) {
 	int newId = getJudgeId(judge);
 	const char* newName = getJudgeName(judge);
 	int* newResults = malloc(sizeof(int)*STATES_TO_SCORE);
-	if (copyResults(newResults, getJudgeResults(judge)) != JUDGE_SUCCESS) return NULL;
+	if (copyJudgesResults(newResults, getJudgeResults(judge)) != JUDGE_SUCCESS) return NULL;
 	Judge newJudge = judgeCreate(newId, newName, newResults);
 	return newJudge;
 }

@@ -65,7 +65,7 @@ State stateCreate(int stateId, const char* stateName, const char* songName) {
 	if (state == NULL) return NULL;
 	state->stateId = stateId;
 	state->stateName = stateName;
-	state->songName = stateName;
+	state->songName = songName;
 	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareInts);
 	state->stateResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
 	return state;
@@ -95,15 +95,36 @@ const char* getSongName(State state) {
 	return state->songName;
 }
 
+int* getAllResultsFromState(State state) {
+	if (!state) return NULL;
+	return state->stateResults;
+}
+
+static StateResult copyStateResults(int* destination, int* source) {
+	if (source == NULL || destination == NULL) return STATE_NULL_ARGUMENT;
+	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
+		destination[i] = source[i];
+	}
+	return STATE_SUCCESS;
+}
 State stateCopy(State state) {
 	if (state == NULL) return NULL;
+	printf("\nafter if\n");
 	int newId = getStateId(state);
+	printf("after id\n");
 	const char* newSong = getSongName(state);
+	printf("after song\n");
 	const char* newStateName = getStateName(state);
+	printf("after name\n");
 	Map newVotes = mapCopy(state->stateVotes);
-	int* newResults = state->stateResults;
+	printf("after map\n");
+	int* newResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
+	printf("after results\n");
+	if (copyStateResults(newResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
+	printf("after copyresults\n");
 	State newState = stateCreate(newId, newStateName, newSong);
 	newState->stateVotes = newVotes;
+	newState->stateResults = newResults;
 	return newState;
 }
 
@@ -129,10 +150,6 @@ void sumResultsFromState(State state) {
 	}
 }
 
-int* getAllResultsFromState(State state) {
-	if (!state) return NULL;
-	return state->stateResults;
-}
 
 int getResultFromStateToState(State stateGiver, int stateTakerId) {
 	if (stateGiver == NULL) return -1;
