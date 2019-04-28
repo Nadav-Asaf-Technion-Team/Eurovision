@@ -11,6 +11,7 @@
 
 struct State_t {
 	int stateId;
+	double totalScore;
 	const char* stateName;
 	const char* songName;
 	Map stateVotes;
@@ -63,6 +64,7 @@ static int compareIntsReversed(MapKeyElement n1, MapKeyElement n2) {
 State stateCreate(int stateId, const char* stateName, const char* songName) {
 	State state = malloc(sizeof(*state));
 	if (state == NULL) return NULL;
+	state->totalScore = 0;
 	state->stateId = stateId;
 	state->stateName = stateName;
 	state->songName = stateName;
@@ -95,6 +97,17 @@ const char* getSongName(State state) {
 	return state->songName;
 }
 
+double getTotalScore(State state) {
+	if (state == NULL) return -1;
+	else return state->totalScore;
+}
+
+StateResult setTotalScore(State state, double totalScore) {
+	if (state == NULL) return STATE_NULL_ARGUMENT;
+	state->totalScore = totalScore;
+	return MAP_SUCCESS;
+}
+
 State stateCopy(State state) {
 	if (state == NULL) return NULL;
 	int newId = getStateId(state);
@@ -104,6 +117,7 @@ State stateCopy(State state) {
 	int* newResults = state->stateResults;
 	State newState = stateCreate(newId, newStateName, newSong);
 	newState->stateVotes = newVotes;
+	newState->totalScore = state->totalScore;
 	return newState;
 }
 

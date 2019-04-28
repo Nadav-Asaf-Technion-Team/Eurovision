@@ -61,6 +61,25 @@ Returns states song name
 const char* getSongName(State state);
 
 /**
+returns the total score a state got
+@param state - state you want to check
+@return - 
+	-1 if state is NULL.
+	otherwise returns the value.
+*/
+double getTotalScore(State state);
+
+/**
+sets the total score given to a state
+@param state - state to set score to
+@param totalScore - score to give
+@return - 
+	STATE_NULL_ARGUMENT if state is null
+	STATE_SUCCESS otherwise
+*/
+StateResult setTotalScore(State state, double totalScore);
+
+/**
 adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to give a vote
 @param stateTakerId - id of the state to whom you want to give a vote

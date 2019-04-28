@@ -70,6 +70,6 @@ copies judge and returns the new judge.
 Judge judgeCopy(Judge judge);
 
 //TODO: write description for function
-int getVoteFromJudge(Judge judge, int stateId);
+int getResultFromJudge(Judge judge, int stateId);
 
 #endif /* JUDGE_H_ */

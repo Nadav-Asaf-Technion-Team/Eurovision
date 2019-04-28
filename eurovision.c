@@ -44,6 +44,19 @@ static bool judgeExist(Eurovision eurovision, int judgeId) {
 	return false;
 }
 
+static int calculateTotal(int audiencePercent, int audienceAvarage, int judgesAvarage) {
+	int audiencePart = audiencePercent / 100;
+	int judgesPart = 1 - audiencePart;
+	return ((audienceAvarage * audiencePart) + (judgesAvarage * judgesPart));
+}
+
+static int compareStatesByScore(State first, State second) {
+	if (getTotalScore(first) == getTotalScore(second))
+		return getStateId(first) - getStateId(second);
+	else
+		return -1 * (getTotalScore(first) - getTotalScore(second));
+}
+
 Eurovision eurovisionCreate() {
 	Eurovision eurovision = malloc(sizeof(*eurovision));
 	if (eurovision == NULL) return NULL;
@@ -171,4 +184,26 @@ EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	State stateElement = getStateFromId(eurovision, stateGiver); 
 	removeVoteFromState(stateElement, stateTaker);
 	return EUROVISION_SUCCESS;
+}
+
+List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
+	int audienceTotal = 0, judgesTotal = 0, audienceAvarage = 0, judgesAvarage = 0;
+	int totalStateScore = 0;
+	List rank = listCopy(eurovision->statesList);
+	LIST_FOREACH(State, rankedState, rank) {
+		audienceTotal = 0;
+		judgesTotal = 0;
+		LIST_FOREACH(State, rankingState, eurovision->statesList) {
+			audienceTotal += getResultFromStateToState(rankingState, rankedState);
+		}
+		LIST_FOREACH(Judge, rankingJudge, eurovision->judgesList) {
+			judgesTotal += getResultFromJudge(rankingJudge, getStateId(rankedState));
+		}
+		audienceAvarage = audienceTotal / listGetSize(eurovision->statesList);
+		judgesAvarage = judgesTotal / listGetSize(eurovision->judgesList);
+		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, judgesAvarage);
+		setTotalScore(rankedState, totalStateScore);
+	}
+	if (listSort(rank, compareStatesByScore) == NULL) return EUROVISION_OUT_OF_MEMORY;
+	return rank;
 }
