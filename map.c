@@ -230,7 +230,7 @@ static void mapBubble(Map map, Node firstNode, Node secondNode) {
 	secondNode->next = firstNode;
 }
 
-void MapSortByKey(Map map) {
+void mapSortByKey(Map map) {
 	Node node = mapGetFirst(map);
 	int iterationSize = mapGetSize(map);
 	for (int i = 0; i < mapGetSize(map); i++) {
@@ -245,7 +245,7 @@ void MapSortByKey(Map map) {
 	}
 }
 
-void MapSortByDataForInt(Map map) {
+void mapSortByDataForInt(Map map) {
 	Node node = mapGetFirst(map);
 	int iterationSize = mapGetSize(map);
 	for (int i = 0; i < mapGetSize(map); i++) {

@@ -134,8 +134,8 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 
 //under check
 void sumResultsFromState(State state) {
-	//mapSortByKey(state->stateVotes);
-	//mapSortByData(state->stateVotes);
+	mapSortByKey(state->stateVotes);
+	mapSortByDataForInt(state->stateVotes);
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		(state->stateResults)[i] = mapGet(state->stateVotes, iterator);

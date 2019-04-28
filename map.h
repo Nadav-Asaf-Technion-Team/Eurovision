@@ -236,9 +236,8 @@ MapResult mapClear(Map map);
 * Declares a new iterator for the loop.
 */
 //================for eurovision use only====================
-static void mapBubble(Map map, Node firstNode, Node secondNode);
-void MapSortByKey(Map map);
-void MapSortByDataForInt(Map map);
+void mapSortByKey(Map map);
+void mapSortByDataForInt(Map map);
 //===========================================================
 
 #define MAP_FOREACH(type, iterator, map) \
