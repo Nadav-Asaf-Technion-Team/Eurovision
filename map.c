@@ -145,7 +145,8 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
 	if (mapContains(map, keyElement)) {
-		searchByKey(map, keyElement)->data_element = dataElement_cpy;
+		Node node = searchByKey(map, keyElement);
+		node->data_element = dataElement_cpy;
 		return MAP_SUCCESS;
 	}
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);
@@ -154,6 +155,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 		return MAP_OUT_OF_MEMORY;
 	}
 	Node new_node = createNode(dataElement_cpy, keyElement_cpy, NULL);
+	//if map is empty
 	if (mapGetSize(map) == 0) {
 		map->head = new_node;
 		map->size++;
@@ -212,7 +214,7 @@ static MapResult nodeRemove (Map map, Node node){
 MapResult mapRemove(Map map, MapKeyElement keyElement){
     if (!(map && keyElement)) return MAP_NULL_ARGUMENT;
     Node node = searchByKey(map,keyElement);
-    if (!node) return MAP_ITEM_DOES_NOT_EXIST;
+	if (!node) return MAP_ITEM_DOES_NOT_EXIST;
 	map->size--;
     return nodeRemove(map, searchByKey(map, keyElement)) ;
 }

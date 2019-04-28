@@ -235,6 +235,7 @@ MapResult mapClear(Map map);
 * Macro for iterating over a map.
 * Declares a new iterator for the loop.
 */
+
 //================for eurovision use only====================
 void mapSortByKey(Map map);
 void mapSortByDataForInt(Map map);

@@ -67,7 +67,7 @@ State stateCreate(int stateId, const char* stateName, const char* songName) {
 	state->totalScore = 0;
 	state->stateId = stateId;
 	state->stateName = stateName;
-	state->songName = stateName;
+	state->songName = songName;
 	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareInts);
 	state->stateResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
 	return state;
@@ -108,29 +108,52 @@ StateResult setTotalScore(State state, double totalScore) {
 	return MAP_SUCCESS;
 }
 
+int* getAllResultsFromState(State state) {
+	if (!state) return NULL;
+	return state->stateResults;
+}
+
+static StateResult copyStateResults(int* destination, int* source) {
+	if (source == NULL || destination == NULL) return STATE_NULL_ARGUMENT;
+	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
+		destination[i] = source[i];
+	}
+	return STATE_SUCCESS;
+}
 State stateCopy(State state) {
 	if (state == NULL) return NULL;
 	int newId = getStateId(state);
 	const char* newSong = getSongName(state);
 	const char* newStateName = getStateName(state);
 	Map newVotes = mapCopy(state->stateVotes);
-	int* newResults = state->stateResults;
+	int* newResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
+	if (copyStateResults(newResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
 	State newState = stateCreate(newId, newStateName, newSong);
 	newState->stateVotes = newVotes;
+	newState->stateResults = newResults;
 	newState->totalScore = state->totalScore;
 	return newState;
 }
 
 void addVoteFromState(State stateGiver, int stateTakerId) {
-	int current = mapGet(stateGiver->stateVotes, stateTakerId);
-	mapPut(stateGiver->stateVotes, stateTakerId, current + 1);
+	int current = 0;
+	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
+		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
+		current++;
+	}
+	else current = 1;
+	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
 
 void removeVoteFromState(State stateGiver, int stateTakerId) {
-	int current = mapGet(stateGiver->stateVotes, stateTakerId);
-	mapPut(stateGiver->stateVotes, stateTakerId, current - 1);
+	int current = 0;
+	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
+		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
+		current--;
+	}
+	else current = 0;
+	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
-
 
 //under check
 void sumResultsFromState(State state) {
@@ -138,15 +161,11 @@ void sumResultsFromState(State state) {
 	mapSortByDataForInt(state->stateVotes);
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
-		(state->stateResults)[i] = mapGet(state->stateVotes, iterator);
+		(state->stateResults)[i] = *(int*)mapGet(state->stateVotes, iterator);
 		iterator = mapGetNext(state->stateVotes);
 	}
 }
 
-int* getAllResultsFromState(State state) {
-	if (!state) return NULL;
-	return state->stateResults;
-}
 
 int getResultFromStateToState(State stateGiver, int stateTakerId) {
 	if (stateGiver == NULL) return -1;
@@ -180,13 +199,13 @@ int getResultFromStateToState(State stateGiver, int stateTakerId) {
 }
 
 int getVoteFromStateToState(State stateGiver, int stateTakerId) {
-	int votes = mapGet(stateGiver->stateVotes, stateTakerId);
+	int votes = mapGet(stateGiver->stateVotes, &stateTakerId);
 	if (votes == NULL) return NO_VOTES;
-	return votes;
+	return *(int*)votes;
 }
 
 StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId) {
-	MapResult result = mapRemove(stateGiver->stateVotes, stateTakerId);
+	MapResult result = mapRemove(stateGiver->stateVotes, &stateTakerId);
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
 	else if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;
 	return STATE_SUCCESS;
