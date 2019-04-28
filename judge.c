@@ -55,7 +55,7 @@ Judge judgeCopy(Judge judge) {
 	return newJudge;
 }
 
-int getVoteFromJudge(Judge judge, int stateId) {
+int getResultFromJudge(Judge judge, int stateId) {
 	if (judge == NULL) return -1;
 	int* results = judge->judgeResults;
 	bool in_array = false;

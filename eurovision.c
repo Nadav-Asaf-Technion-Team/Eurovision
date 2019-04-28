@@ -123,12 +123,20 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 	}
 		//we need to check for a jugde that gave points to this state, and remove him, will be done 
 		//	provided the proper function
-		LIST_FOREACH(State, currentState, eurovision->statesList) {
-			if (getVoteFromStateToState(currentState, stateId)) {
-				removeAllVotesFromStateToState(currentState, stateId);
-			}
-			return EUROVISION_SUCCESS;
+	List judgesListCopy = listCopy(eurovision->judgesList);
+	LIST_FOREACH(Judge, currentJudge, judgesListCopy) {
+		if (getResultFromJudge(currentJudge, stateId) != 0) {
+			eurovisionRemoveJudge(eurovision, getJudgeId(currentJudge));
 		}
+	}
+	listDestroy(judgesListCopy);
+
+	LIST_FOREACH(State, currentState, eurovision->statesList) {
+		if (getVoteFromStateToState(currentState, stateId)) {
+			removeAllVotesFromStateToState(currentState, stateId);
+		}
+		return EUROVISION_SUCCESS;
+	}
 }
 
 static State getStateFromId(Eurovision eurovision, int stateId) {

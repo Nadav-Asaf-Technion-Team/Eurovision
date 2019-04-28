@@ -129,8 +129,6 @@ void sumResultsFromState(State state) {
 	}
 }
 
-
-
 int* getAllResultsFromState(State state) {
 	if (!state) return NULL;
 	return state->stateResults;
