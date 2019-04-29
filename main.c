@@ -10,10 +10,10 @@
 int main() {
 	Eurovision eurovision = eurovisionCreate();
 	printf("adding states..\n");
-	eurovisionAddState(eurovision, 1, 'a', "song1");
-	eurovisionAddState(eurovision, 2, 'b', "song2");
-	eurovisionAddState(eurovision, 3, 'c', "song3");
-	eurovisionAddState(eurovision, 4, 'd', "song4");
+	eurovisionAddState(eurovision, 1, "a", "song1");
+	eurovisionAddState(eurovision, 2, "b", "song2");
+	eurovisionAddState(eurovision, 3, "c", "song3");
+	eurovisionAddState(eurovision, 4, "d", "song4");
 	printf("Added states\n");
 	eurovisionAddVote(eurovision, 1, 4);
 	eurovisionAddVote(eurovision, 1, 2);
