@@ -123,6 +123,7 @@ static Node searchByKey(Map map, MapKeyElement element){
 
 MapKeyElement mapGetFirst(Map map){
 	if (map == NULL || map->head == NULL) return NULL;
+	map->iterator = map->head->key_element;
     return map->head->key_element;
 }
 
@@ -130,6 +131,7 @@ MapKeyElement mapGetNext(Map map){
     if (!map || !map->iterator) return NULL;
     Node ptr = searchByKey(map, map->iterator);
     if (!ptr || !ptr->next) return NULL;
+	map->iterator = ptr->next->key_element;
     return ptr->next->key_element;
 }
 
@@ -147,14 +149,22 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	if (!(map && keyElement && dataElement)) return MAP_NULL_ARGUMENT;
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
-	printf("key element is %d, data element is %d\n", *(int*)keyElement, *(int*)dataElement);
 	if (mapContains(map, keyElement)) {
-		printf("ma shta rotze ahi\n");
+		printf("map contains\n");
 		Node node = searchByKey(map, keyElement);
 		node->data_element = dataElement_cpy;
+		printf("=======================\n");
+		Node ptr = map->head;
+		printf("map head is: %d\n", *(int*)map->head->key_element);
+		printf("map head next is: %d\n", *(int*)map->head->next->key_element);
+		while (ptr) {
+			printf("ptr is %d\n", *(int*)(ptr->key_element));
+			if (ptr->next) printf("next is %d\n", *(int*)(ptr->next->key_element));
+			ptr = ptr->next;
+		}
+		printf("=======================\n");
 		return MAP_SUCCESS;
 	}
-	printf("bbbbbbbbbbbbb\n");
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);
 	if (keyElement_cpy == NULL) {
 		map->freeDataElement(dataElement_cpy);
@@ -163,6 +173,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	Node new_node = createNode(dataElement_cpy, keyElement_cpy, NULL);
 	//if map is empty
 	if (mapGetSize(map) == 0) {
+		printf("map is empty\n");
 		map->head = new_node;
 		map->size++;
 		return MAP_SUCCESS;
@@ -174,11 +185,18 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 		previous_node = current_node;
 		current_node = current_node->next;
 	}
+	if (current_node == map->head) {
+		printf("first if\n");
+		new_node->next = current_node;
+		map->head = new_node;
+	}
 	//map reached its final element (or contains only one element)
-	if (current_node == NULL || previous_node == current_node) {
+	else if (current_node == NULL || previous_node == current_node) {
+		printf("second if\n");
 		previous_node->next = new_node;
 	}
 	else {
+		printf("else\n");
 		previous_node->next = new_node;
 		new_node->next = current_node;
 	}

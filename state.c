@@ -20,7 +20,8 @@ struct State_t {
 //=================================test function=================================
 void checkSumResultsAux(State state) {
 	printf("map head is: %d\n", *(int*)mapGetFirst(state->stateVotes));
-	printf("map size is %d\n", mapGetSize(state->stateVotes));
+	printf("map size is: %d\n", mapGetSize(state->stateVotes));
+	printf("next is null: %d\n", mapGetNext(state->stateVotes)==NULL);
 	MAP_FOREACH(int*, currentId, state->stateVotes) {
 		printf("current id (beofre sumresults): %d\n", *currentId);
 	};
