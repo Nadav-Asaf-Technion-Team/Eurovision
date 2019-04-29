@@ -17,6 +17,20 @@ struct State_t {
 	int* stateResults;
 };
 
+//=================================test function=================================
+void checkSumResultsAux(State state) {
+	MAP_FOREACH(int*, currentId, state->stateVotes) {
+		printf("%d, ", *currentId);
+	}
+	printf("\n");
+	sumResultsFromState(state);
+	MAP_FOREACH(int*, currentId, state->stateVotes) {
+		printf("%d, ", *currentId);
+	}
+	printf("\n");
+}
+//===============================end of test function=========================
+
 /*===========================implimantation of functions for map======================================*/
 static MapKeyElement copyKeyInt(MapKeyElement n) {
 	if (!n) {
@@ -123,11 +137,14 @@ State stateCopy(State state) {
 
 void addVoteFromState(State stateGiver, int stateTakerId) {
 	int current = 0;
+	printf("entered AddVoteFromState\n");
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
+		printf("Entered if !=null\n");
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current++;
 	}
 	else current = 1;
+	printf("current is");
 	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
 

@@ -8,8 +8,19 @@ struct Eurovision_t {
 };
 
 //_______________test functions_________________
-int getAmountOfJudges(Eurovision eurovision) {
-	return listGetSize(eurovision->judgesList);
+int getAmountOfStates(Eurovision eurovision) {
+	return listGetSize(eurovision->statesList);
+}
+
+void checkSumResults(Eurovision eurovision, int stateId) {
+	LIST_FOREACH(State, current, eurovision->statesList) {
+		printf("Entered foreach, id is %d\n", getStateId(current));
+		if (getStateId(current) == stateId) {
+			printf("found it\n");
+			checkSumResultsAux(current);
+		}
+			
+	}
 }
 //_______________end oftest functions___________
 
@@ -101,7 +112,7 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 	if (!isNameValid(stateName) || !isNameValid(songName)) return EUROVISION_INVALID_NAME;
 	/*end of input check*/
 	State currentState = stateCreate(stateId, stateName, songName);
-	ListResult result = listInsertAfterCurrent(eurovision->statesList, currentState);
+	ListResult result = listInsertLast(eurovision->statesList, currentState);
 	if (result == LIST_OUT_OF_MEMORY) { //check if needed
 		stateDestroy(currentState);
 		return EUROVISION_OUT_OF_MEMORY;
@@ -153,8 +164,11 @@ EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int sta
 	}
 	if (stateGiver == stateTaker) return EUROVISION_SAME_STATE;
 	/*end of input check*/
+	printf("Add vote: finished input check\n");
 	State stateElement = getStateFromId(eurovision, stateGiver); 
+	printf("add vote: state id of state elemnt giver: %d\n", getStateId(stateElement));
 	addVoteFromState(stateElement, stateTaker);
+	printf("Added vote to state\n");
 	return EUROVISION_SUCCESS;
 }
 

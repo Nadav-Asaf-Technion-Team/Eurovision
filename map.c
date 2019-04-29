@@ -168,7 +168,8 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 		previous_node = current_node;
 		current_node = current_node->next;
 	}
-	if (current_node == NULL) {
+	//map reached its final element (or contains only one element)
+	if (current_node == NULL || previous_node == current_node) {
 		previous_node->next = new_node;
 	}
 	else {

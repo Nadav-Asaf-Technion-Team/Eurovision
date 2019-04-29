@@ -20,7 +20,9 @@ typedef enum eurovisionResult_t {
 typedef struct Eurovision_t* Eurovision;
 
 //_______________test functions_________________
-int getAmountOfJudges(Eurovision eurovision);
+int getAmountOfStates(Eurovision eurovision);
+
+void checkSumResults(Eurovision eurovision, int stateId);
 
 //_______________end of test functions_________
 
