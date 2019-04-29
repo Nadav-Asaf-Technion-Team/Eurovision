@@ -115,7 +115,7 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 	/*end of input check*/
 	State currentState = stateCreate(stateId, stateName, songName);
 	ListResult result = listInsertAfterCurrent(eurovision->statesList, currentState);
-	if (result = LIST_OUT_OF_MEMORY) { //check if needed
+	if (result == LIST_OUT_OF_MEMORY) { //check if needed
 		stateDestroy(currentState);
 		return EUROVISION_OUT_OF_MEMORY;
 	}
