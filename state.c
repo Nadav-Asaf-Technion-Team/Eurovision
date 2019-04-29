@@ -19,15 +19,15 @@ struct State_t {
 
 //=================================test function=================================
 void checkSumResultsAux(State state) {
+	printf("map head is: %d\n", *(int*)mapGetFirst(state->stateVotes));
+	printf("map size is %d\n", mapGetSize(state->stateVotes));
 	MAP_FOREACH(int*, currentId, state->stateVotes) {
-		printf("%d, ", *currentId);
-	}
-	printf("\n");
+		printf("current id (beofre sumresults): %d\n", *currentId);
+	};
 	sumResultsFromState(state);
 	MAP_FOREACH(int*, currentId, state->stateVotes) {
-		printf("%d, ", *currentId);
+		printf("current id (after sum results): %d\n", *currentId);
 	}
-	printf("\n");
 }
 //===============================end of test function=========================
 
@@ -137,14 +137,11 @@ State stateCopy(State state) {
 
 void addVoteFromState(State stateGiver, int stateTakerId) {
 	int current = 0;
-	printf("entered AddVoteFromState\n");
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
-		printf("Entered if !=null\n");
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current++;
 	}
 	else current = 1;
-	printf("current is");
 	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
 }
 

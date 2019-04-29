@@ -134,21 +134,27 @@ MapKeyElement mapGetNext(Map map){
 }
 
 bool mapContains (Map map, MapKeyElement element){
-    Node old_iterator = NULL;
-    MAP_FOREACH(MapKeyElement, map_element, map){
-        if(!(map->compareKeyElements(element,map_element))) return true;
-    }
+	Node ptr = map->head;
+	while (ptr != NULL) {
+		if (map->compareKeyElements(element, ptr->key_element) == 0) {
+			return true;
+		}
+		ptr = ptr->next;
+	}
     return false;
 }
 MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) {
 	if (!(map && keyElement && dataElement)) return MAP_NULL_ARGUMENT;
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
+	printf("key element is %d, data element is %d\n", *(int*)keyElement, *(int*)dataElement);
 	if (mapContains(map, keyElement)) {
+		printf("ma shta rotze ahi\n");
 		Node node = searchByKey(map, keyElement);
 		node->data_element = dataElement_cpy;
 		return MAP_SUCCESS;
 	}
+	printf("bbbbbbbbbbbbb\n");
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);
 	if (keyElement_cpy == NULL) {
 		map->freeDataElement(dataElement_cpy);
