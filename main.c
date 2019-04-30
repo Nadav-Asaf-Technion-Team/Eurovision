@@ -1,27 +1,25 @@
-#include "eurovision.h"
-#include "state.h"
-#include "judge.h"
-#include "list.h"
-#include <string.h>
 #include <stdio.h>
-//This is the main function for testing. make sure you're on 
-//testing-branch before you work on it, and make sure you go
-//back to master when you're done.
-int main() {
-	Eurovision eurovision = eurovisionCreate();
-	printf("adding states..\n");
-	eurovisionAddState(eurovision, 1, "a", "songa");
-	eurovisionAddState(eurovision, 2, "b", "songb");
-	EurovisionResult results = eurovisionAddState(eurovision, 3, "c", "songc");
-	eurovisionAddState(eurovision, 4, "d", "songd");
-	eurovisionAddVote(eurovision, 1, 4);
-	eurovisionAddVote(eurovision, 1, 2);
-	eurovisionAddVote(eurovision, 1, 2);
-	eurovisionAddVote(eurovision, 1, 3);
-	eurovisionAddVote(eurovision, 1, 3);
-	eurovisionAddVote(eurovision, 1, 4);
-	eurovisionAddVote(eurovision, 1, 2);
-	printf("checking sum result\n");
-	checkSumResults(eurovision, 1);
+#include <stdlib.h>
+#include "eurovisionTests.h"
+
+#define TEST(t)                                                                \
+  do {                                                                         \
+    printf("Testing %s ...\n", #t);                                            \
+    if ((t()))                                                                 \
+      printf("Test %s: SUCCESS\n", #t);                                        \
+    else                                                                       \
+      printf("Test %s: FAIL\n", #t);                                           \
+  } while (0);
+
+int main(int argc, char* argv[]) {
+	TEST(testAddState)
+	TEST(testRemoveState)
+	TEST(testAddJudge)
+	TEST(testRemoveJudge)
+	TEST(testAddVote)
+	TEST(testRemoveVote)
+	TEST(testRunContest)
+	TEST(testRunAudienceFavorite)
+	//TEST(testRunGetFriendlyStates)
 	return 0;
 }

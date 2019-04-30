@@ -16,7 +16,8 @@ Judge judgeCreate(int judgeId, const char* judgeName, int* judgeResults) {
 }
 
 void judgeDestroy(Judge judge) {
-	free(judge->judgeResults);
+	if (judge == NULL) return;
+	if (judge->judgeResults != NULL) free(judge->judgeResults);
 	free(judge);
 }
 

@@ -91,7 +91,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	if (newResults == NULL) return EUROVISION_OUT_OF_MEMORY;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		if (!isIdValid(judgeResults[i])) return EUROVISION_INVALID_ID;
-		//else if (!stateExist(eurovision, judgeResults[i])) return EUROVISION_STATE_NOT_EXIST;
+		else if (!stateExist(eurovision, judgeResults[i])) return EUROVISION_STATE_NOT_EXIST;
 		else {
 			newResults[i] = judgeResults[i];
 		}
@@ -117,7 +117,7 @@ EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
 
 EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const char *stateName, const char *songName) {
 	/*input check*/
-	if (!eurovision || !stateId || !stateName || !songName) return EUROVISION_NULL_ARGUMENT; //check if needed
+	if (!eurovision || !stateName || !songName) return EUROVISION_NULL_ARGUMENT; 
 	if (!isIdValid(stateId)) return EUROVISION_INVALID_ID;
 	if (stateExist(eurovision, stateId)) return EUROVISION_STATE_ALREADY_EXIST;
 	if (!isNameValid(stateName) || !isNameValid(songName)) return EUROVISION_INVALID_NAME;
