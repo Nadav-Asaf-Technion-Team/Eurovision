@@ -248,13 +248,15 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
 static void mapBubble(Map map, Node firstNode, Node secondNode) {
 	if (!map || !firstNode || !secondNode) return NULL;
 	Node previous = map->head;
-	while (previous) {
+	while (previous->next) {
 		if (previous->next == firstNode) break;
 		previous = previous->next;
 	}
-	previous->next = secondNode;
-	firstNode->next = secondNode->next;
-	secondNode->next = firstNode;
+	if (previous->next) {
+		previous->next = secondNode;
+		firstNode->next = secondNode->next;
+		secondNode->next = firstNode;
+	}
 }
 
 void mapSortByKey(Map map) {
