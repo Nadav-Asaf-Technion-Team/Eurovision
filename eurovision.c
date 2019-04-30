@@ -135,7 +135,7 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 	/*input check*/
 	if (!eurovision) return EUROVISION_NULL_ARGUMENT;
-	if (isIdValid(stateId)) return EUROVISION_INVALID_ID;
+	if (!isIdValid(stateId)) return EUROVISION_INVALID_ID;
 	if (stateExist(eurovision, stateId) == false) return EUROVISION_STATE_NOT_EXIST;
 	/*end of input check*/
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
