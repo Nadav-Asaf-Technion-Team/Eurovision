@@ -12,6 +12,10 @@ typedef enum stateResult_t {
 	STATE_SUCCESS
 } StateResult;
 
+//==========================test function==================
+void checkSumResultsAux(State state);
+//======================end of test function================
+
 /**
 Creates a new state element
 @param stateId - unique state ID for the new state

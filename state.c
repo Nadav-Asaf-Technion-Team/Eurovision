@@ -18,6 +18,21 @@ struct State_t {
 	int* stateResults;
 };
 
+//=================================test function=================================
+void checkSumResultsAux(State state) {
+	printf("map head is: %d\n", *(int*)mapGetFirst(state->stateVotes));
+	printf("map size is: %d\n", mapGetSize(state->stateVotes));
+	printf("next is null: %d\n", mapGetNext(state->stateVotes)==NULL);
+	MAP_FOREACH(int*, currentId, state->stateVotes) {
+		printf("current id (beofre sumresults): %d\n", *currentId);
+	};
+	sumResultsFromState(state);
+	MAP_FOREACH(int*, currentId, state->stateVotes) {
+		printf("current id (after sum results): %d\n", *currentId);
+	}
+}
+//===============================end of test function=========================
+
 /*===========================implimantation of functions for map======================================*/
 static MapKeyElement copyKeyInt(MapKeyElement n) {
 	if (!n) {
@@ -158,11 +173,15 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 //under check
 void sumResultsFromState(State state) {
 	mapSortByKey(state->stateVotes);
+	printf("==============sorted by key===================\n");
 	mapSortByDataForInt(state->stateVotes);
+	printf("==============sorted by data===================\n");
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		(state->stateResults)[i] = *(int*)mapGet(state->stateVotes, iterator);
 		iterator = mapGetNext(state->stateVotes);
+		if (iterator == NULL) break;
+
 	}
 }
 

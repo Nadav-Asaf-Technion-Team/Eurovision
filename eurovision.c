@@ -8,8 +8,17 @@ struct Eurovision_t {
 };
 
 //_______________test functions_________________
-int getAmountOfJudges(Eurovision eurovision) {
-	return listGetSize(eurovision->judgesList);
+int getAmountOfStates(Eurovision eurovision) {
+	return listGetSize(eurovision->statesList);
+}
+
+void checkSumResults(Eurovision eurovision, int stateId) {
+	LIST_FOREACH(State, current, eurovision->statesList) {
+		if (getStateId(current) == stateId) {
+			checkSumResultsAux(current);
+		}
+			
+	}
 }
 //_______________end oftest functions___________
 
@@ -114,8 +123,8 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 	if (!isNameValid(stateName) || !isNameValid(songName)) return EUROVISION_INVALID_NAME;
 	/*end of input check*/
 	State currentState = stateCreate(stateId, stateName, songName);
-	ListResult result = listInsertAfterCurrent(eurovision->statesList, currentState);
-	if (result = LIST_OUT_OF_MEMORY) { //check if needed
+	ListResult result = listInsertLast(eurovision->statesList, currentState);
+	if (result == LIST_OUT_OF_MEMORY) { //check if needed
 		stateDestroy(currentState);
 		return EUROVISION_OUT_OF_MEMORY;
 	}
