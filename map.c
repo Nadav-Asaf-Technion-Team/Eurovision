@@ -150,19 +150,8 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
 	if (mapContains(map, keyElement)) {
-		printf("map contains\n");
 		Node node = searchByKey(map, keyElement);
 		node->data_element = dataElement_cpy;
-		printf("=======================\n");
-		Node ptr = map->head;
-		printf("map head is: %d\n", *(int*)map->head->key_element);
-		printf("map head next is: %d\n", *(int*)map->head->next->key_element);
-		while (ptr) {
-			printf("ptr is %d\n", *(int*)(ptr->key_element));
-			if (ptr->next) printf("next is %d\n", *(int*)(ptr->next->key_element));
-			ptr = ptr->next;
-		}
-		printf("=======================\n");
 		return MAP_SUCCESS;
 	}
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);
@@ -173,7 +162,6 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	Node new_node = createNode(dataElement_cpy, keyElement_cpy, NULL);
 	//if map is empty
 	if (mapGetSize(map) == 0) {
-		printf("map is empty\n");
 		map->head = new_node;
 		map->size++;
 		return MAP_SUCCESS;
@@ -186,17 +174,14 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 		current_node = current_node->next;
 	}
 	if (current_node == map->head) {
-		printf("first if\n");
 		new_node->next = current_node;
 		map->head = new_node;
 	}
 	//map reached its final element (or contains only one element)
 	else if (current_node == NULL || previous_node == current_node) {
-		printf("second if\n");
 		previous_node->next = new_node;
 	}
 	else {
-		printf("else\n");
 		previous_node->next = new_node;
 		new_node->next = current_node;
 	}
@@ -246,46 +231,71 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
 
 //================for eurovision use only====================
 static void mapBubble(Map map, Node firstNode, Node secondNode) {
-	if (!map || !firstNode || !secondNode) return NULL;
+	if (!map || !firstNode || !secondNode) return;
 	Node previous = map->head;
 	while (previous->next) {
 		if (previous->next == firstNode) break;
 		previous = previous->next;
 	}
+	if (map->head == firstNode) map->head = secondNode;
 	if (previous->next) {
 		previous->next = secondNode;
 		firstNode->next = secondNode->next;
 		secondNode->next = firstNode;
 	}
 }
+static void printNode(Node node) {
+	if (node != NULL) {
+		printf("node is: %p\n", node);
+		if (node->key_element != NULL)
+			printf("	node->keyElement is: %d\n", *(int*)node->key_element);
+		else printf("	node->keyElement is null\n");
+		if(node->data_element != NULL)
+			printf("	node->dataElement is: %d\n", *(int*)node->data_element);
+		else printf("	node->dataElement is null\n");
 
+		if (node->next != NULL) {
+			printf("	node->next is: %p\n", node->next);
+			if (node->next->key_element != NULL)
+				printf("	node->next->keyElement is: %d\n", *(int*)node->next->key_element);
+			else printf("	node->next->keyElement is null\n");
+			if (node->next->data_element != NULL)
+				printf("	node->next->dataElement is: %d\n", *(int*)node->next->data_element);
+			else printf("	node->next->dataElement is null\n");
+		}
+		else printf("	node->next is null\n");
+	}
+	else printf("node is null\n");
+}
+//sorts the map by key from small to large
 void mapSortByKey(Map map) {
-	Node node = mapGetFirst(map);
-	int iterationSize = mapGetSize(map);
+	Node node = map->head;
+	int iterationSize = mapGetSize(map)-1;
 	for (int i = 0; i < mapGetSize(map); i++) {
-		node = mapGetFirst(map);
+		node = map->head;
 		for (int j = 0; j < iterationSize; j++) {
-			if (map->compareKeyElements(mapGetNext(node), node) < 0) {
-				mapBubble(map, node, mapGetNext(node));
+			if (map->compareKeyElements(node->next->key_element, node->key_element) < 0) {
+				mapBubble(map, node, node->next);
 			}
-			node = mapGetNext(node);
+			node = node->next;
+		}
+		iterationSize--;
+	}
+}
+//sorts the map by data value from large to small
+void mapSortByDataForInt(Map map) {
+	Node node = map->head;
+	int iterationSize = mapGetSize(map) - 1;
+	for (int i = 0; i < mapGetSize(map); i++) {
+		node = map->head;
+		for (int j = 0; j < iterationSize; j++) {
+			if (map->compareKeyElements(node->next->data_element, node->data_element) > 0) {
+				mapBubble(map, node, node->next);
+			}
+			node = node->next;
 		}
 		iterationSize--;
 	}
 }
 
-void mapSortByDataForInt(Map map) {
-	Node node = mapGetFirst(map);
-	int iterationSize = mapGetSize(map);
-	for (int i = 0; i < mapGetSize(map); i++) {
-		node = mapGetFirst(map);
-		for (int j = 0; j < iterationSize; j++) {
-			if (map->compareKeyElements(mapGetNext(node), node) < 0) {
-				mapBubble(map, node, mapGetNext(node));
-			}
-			node = mapGetNext(node);
-		}
-		iterationSize--;
-	}
-}
 //================end of for eurovision use only====================

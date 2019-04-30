@@ -17,9 +17,9 @@ int main() {
 	eurovisionAddVote(eurovision, 1, 4);
 	eurovisionAddVote(eurovision, 1, 2);
 	eurovisionAddVote(eurovision, 1, 2);
-	eurovisionAddVote(eurovision, 1, 2);
 	eurovisionAddVote(eurovision, 1, 3);
 	eurovisionAddVote(eurovision, 1, 3);
+	eurovisionAddVote(eurovision, 1, 4);
 	eurovisionAddVote(eurovision, 1, 2);
 	printf("checking sum result\n");
 	checkSumResults(eurovision, 1);

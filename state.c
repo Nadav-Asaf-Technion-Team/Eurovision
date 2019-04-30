@@ -159,11 +159,15 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 //under check
 void sumResultsFromState(State state) {
 	mapSortByKey(state->stateVotes);
+	printf("==============sorted by key===================\n");
 	mapSortByDataForInt(state->stateVotes);
+	printf("==============sorted by data===================\n");
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		(state->stateResults)[i] = *(int*)mapGet(state->stateVotes, iterator);
 		iterator = mapGetNext(state->stateVotes);
+		if (iterator == NULL) break;
+
 	}
 }
 
