@@ -191,6 +191,7 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	int audienceTotal = 0, judgesTotal = 0, audienceAvarage = 0, judgesAvarage = 0;
 	int totalStateScore = 0;
 	List rank = listCopy(eurovision->statesList);
+	if (listGetSize(rank) == 0) return rank;
 	LIST_FOREACH(State, rankedState, rank) {
 		audienceTotal = 0;
 		judgesTotal = 0;
@@ -210,5 +211,5 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 }
 
 List eurovisionRunAudienceFavorite(Eurovision eurovision) {
-	 
+	return eurovisionRunContest(eurovision, 100);
 }

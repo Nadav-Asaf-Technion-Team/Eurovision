@@ -51,9 +51,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="libmtm.a">
-      <Filter>Resource Files</Filter>
-    </Library>
-  </ItemGroup>
 </Project>
