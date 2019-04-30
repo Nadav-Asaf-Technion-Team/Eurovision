@@ -83,10 +83,11 @@ void eurovisionDestroy(Eurovision eurovision) {
 EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	const char* judgeName,
 	int* judgeResults) {
-	if (eurovision == NULL || judgeName == NULL) return EUROVISION_NULL_ARGUMENT;
-	if (judgeExist(eurovision, judgeId)) return EUROVISION_JUDGE_ALREADY_EXIST;
+	if (eurovision == NULL || judgeName == NULL || judgeResults == NULL) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(judgeId)) return EUROVISION_INVALID_ID;
 	if (!isNameValid(judgeName)) return EUROVISION_INVALID_NAME;
+	//state not exist should be here
+	if (judgeExist(eurovision, judgeId)) return EUROVISION_JUDGE_ALREADY_EXIST;
 	int* newResults = malloc(sizeof(int) * STATES_TO_SCORE);
 	if (newResults == NULL) return EUROVISION_OUT_OF_MEMORY;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
@@ -119,8 +120,8 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 	/*input check*/
 	if (!eurovision || !stateName || !songName) return EUROVISION_NULL_ARGUMENT; 
 	if (!isIdValid(stateId)) return EUROVISION_INVALID_ID;
-	if (stateExist(eurovision, stateId)) return EUROVISION_STATE_ALREADY_EXIST;
 	if (!isNameValid(stateName) || !isNameValid(songName)) return EUROVISION_INVALID_NAME;
+	if (stateExist(eurovision, stateId)) return EUROVISION_STATE_ALREADY_EXIST;
 	/*end of input check*/
 	State currentState = stateCreate(stateId, stateName, songName);
 	ListResult result = listInsertLast(eurovision->statesList, currentState);
@@ -133,9 +134,9 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 
 EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 	/*input check*/
-	if (!eurovision || !stateId) return EUROVISION_NULL_ARGUMENT; //check if needed
-	if (stateExist(eurovision, stateId) == false) return EUROVISION_STATE_NOT_EXIST;
+	if (!eurovision) return EUROVISION_NULL_ARGUMENT;
 	if (isIdValid(stateId)) return EUROVISION_INVALID_ID;
+	if (stateExist(eurovision, stateId) == false) return EUROVISION_STATE_NOT_EXIST;
 	/*end of input check*/
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
 		if (getStateId(currentState) == stateId) {
