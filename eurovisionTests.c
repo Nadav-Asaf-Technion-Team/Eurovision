@@ -277,9 +277,9 @@ bool testRunContest() {
   setupEurovisionVotes2(eurovision);
 
   List ranking = eurovisionRunContest(eurovision, 40);
-  printf("List size is %d\n", listGetSize(ranking));
   CHECK(listGetSize(ranking), 16);
   char *current = (char*)listGetFirst(ranking);
+  printf("current is %s\n", current);
   CHECK(strcmp(current, "united kingdom"), 0);
   current = (char*)listGetNext(ranking);
   CHECK(strcmp(current, "moldova"), 0);
