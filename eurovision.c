@@ -60,10 +60,15 @@ static int calculateTotal(int audiencePercent, int audienceAvarage, int judgesAv
 }
 
 static int compareStatesByScore(State first, State second) {
+
 	if (getTotalScore(first) == getTotalScore(second))
 		return getStateId(first) - getStateId(second);
 	else
 		return -1 * (getTotalScore(first) - getTotalScore(second));
+}
+
+static void freeString(char* str) {
+	free(str);
 }
 
 Eurovision eurovisionCreate() {
@@ -216,8 +221,14 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, judgesAvarage);
 		setTotalScore(rankedState, totalStateScore);
 	}
-	if (listSort(rank, compareStatesByScore) == NULL) return EUROVISION_OUT_OF_MEMORY;
-	return rank;
+	if (listSort(rank, compareStatesByScore) != LIST_SUCCESS) {
+		return NULL;
+	}
+	List rankByName = listCreate(strcpy, freeString);
+	LIST_FOREACH(State, currentState, eurovision->statesList) {
+		listInsertLast(rankByName, getStateName(currentState));
+	}
+	return rankByName;
 }
 
 List eurovisionRunAudienceFavorite(Eurovision eurovision) {
