@@ -2,6 +2,8 @@
 #define EUROVISION_H_
 
 #include "list.h"
+#include "judge.h"
+#include "state.h"
 
 typedef enum eurovisionResult_t {
 	EUROVISION_NULL_ARGUMENT,

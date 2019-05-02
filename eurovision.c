@@ -1,6 +1,5 @@
 #include "eurovision.h"
-#include "judge.h"
-#include "state.h"
+
 
 #define MAX_RESULT 12
 #define FRIENDLY_SEPERATOR " - "

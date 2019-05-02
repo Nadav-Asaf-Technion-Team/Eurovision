@@ -1,9 +1,4 @@
 ﻿#include "state.h"
-#include "map.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
 
 #define NUMBER_OF_RESULTS_PER_STATE 10
 #define NO_VOTES 0

@@ -2,7 +2,11 @@
 #define STATE_H_
 
 #include "map.h"
-//Nadav
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
 typedef struct State_t* State;
 
 typedef enum stateResult_t {
