@@ -171,7 +171,7 @@ bool testAddState() {
   CHECK(eurovisionAddState(eurovision, 0, "croatia", "the dream"), EUROVISION_STATE_ALREADY_EXIST);
   CHECK(eurovisionAddState(eurovision, 0, "israel", "home"), EUROVISION_STATE_ALREADY_EXIST);
   CHECK(eurovisionAddState(eurovision, -1, "croatia", "the dream"), EUROVISION_INVALID_ID);
-  printf("passed all states\n");
+  //printf("passed all states\n");
   eurovisionDestroy(eurovision);
   return true;
 }
@@ -279,7 +279,7 @@ bool testRunContest() {
   List ranking = eurovisionRunContest(eurovision, 40);
   CHECK(listGetSize(ranking), 16);
   char *current = (char*)listGetFirst(ranking);
-  printf("current is %s\n", current);
+  //printf("current is %s\n", current);
   CHECK(strcmp(current, "united kingdom"), 0);
   current = (char*)listGetNext(ranking);
   CHECK(strcmp(current, "moldova"), 0);
@@ -320,21 +320,21 @@ bool testRunAudienceFavorite() {
 }
 
 /* friendlies: malta-croatia, russia-moldova */
-//bool testRunGetFriendlyStates() {
-//  Eurovision eurovision = setupEurovision();
-//  setupEurovisionStates(eurovision);
-//  /* setupEurovisionJudges(eurovision); */
-//  setupEurovisionVotes2(eurovision);
-//
-//  List friendlies = eurovisionRunGetFriendlyStates(eurovision);
-//  CHECK((friendlies == NULL), false);
-//  CHECK(listGetSize(friendlies), 2);
-//  char *current = (char *)listGetFirst(friendlies);
-//  CHECK(strcmp(current, "croatia - malta"), 0);
-//  current  = (char*)listGetNext(friendlies);
-//  CHECK(strcmp(current, "moldova - russia"), 0);
-//
-//  listDestroy(friendlies);
-//  eurovisionDestroy(eurovision);
-//  return true;
-//}
+bool testRunGetFriendlyStates() {
+  Eurovision eurovision = setupEurovision();
+  setupEurovisionStates(eurovision);
+  /* setupEurovisionJudges(eurovision); */
+  setupEurovisionVotes2(eurovision);
+
+  List friendlies = eurovisionRunGetFriendlyStates(eurovision);
+  CHECK((friendlies == NULL), false);
+  CHECK(listGetSize(friendlies), 2);
+  char *current = (char *)listGetFirst(friendlies);
+  CHECK(strcmp(current, "croatia - malta"), 0);
+  current  = (char*)listGetNext(friendlies);
+  CHECK(strcmp(current, "moldova - russia"), 0);
+
+  listDestroy(friendlies);
+  eurovisionDestroy(eurovision);
+  return true;
+}

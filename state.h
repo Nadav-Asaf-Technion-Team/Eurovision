@@ -14,6 +14,8 @@ typedef enum stateResult_t {
 
 //==========================test function==================
 void checkSumResultsAux(State state);
+
+Map getVotesFromState(State state);
 //======================end of test function================
 
 /**
@@ -83,6 +85,27 @@ sets the total score given to a state
 */
 StateResult setTotalScore(State state, double totalScore);
 
+/*
+sets boolean value for field "friendlied", that describes if a state was 
+already counted as another state's friend.
+@param state - the state to set value to.
+@param value - true/false if the state was/wasn't counted.
+@return - 
+	STATE_NULL_ARGUMENT if state is NULL
+	MAP_SUCCESS otherwise.
+*/
+StateResult setFriendlied(State state, bool value);
+
+
+/*
+returns boolean value for field "friendlied", that describes if a state was
+already counted as another state's friend.
+@param state - the state to check.
+@return -
+	false if state is NULL
+	apropriate value otherwise.
+*/
+bool isFriendlied(State state);
 /**
 adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to give a vote

@@ -2,6 +2,9 @@
 #include "judge.h"
 #include "state.h"
 
+#define MAX_RESULT 12
+#define FRIENDLY_SEPERATOR " - "
+
 struct Eurovision_t {
 	List statesList;
 	List judgesList;
@@ -54,7 +57,7 @@ static bool judgeExist(Eurovision eurovision, int judgeId) {
 }
 
 static double calculateTotal(int audiencePercent, double audienceAvarage, double judgesAvarage) {
-	double audiencePart = audiencePercent / 100;
+	double audiencePart = (double)audiencePercent / 100;
 	double judgesPart = 1 - audiencePart;
 	double result = ((audienceAvarage * audiencePart) + (judgesAvarage * judgesPart));
 	return result;
@@ -63,18 +66,33 @@ static double calculateTotal(int audiencePercent, double audienceAvarage, double
 static int compareStatesByScore(State first, State second) {
 	double diff = getTotalScore(second) - getTotalScore(first);
 	if (diff == 0) {
-		//printf("Score is the same between %s and %s\n", getStateName(first), getStateName(second));
 		return ((getStateId(first) - getStateId(second)) > 0 ? 1 : -1);
 	}
 	else if (diff > 0) return 1;
 	else return -1;
 }
 
+static void sumAllResults(Eurovision eurovision) {
+	LIST_FOREACH(State, rankingState, eurovision->statesList) {
+		sumResultsFromState(rankingState);
+	}
+}
+
+static char* createFriendlyString(State firstState, State secondState) {
+	char* firstName = getStateName(firstState), *secondName = getStateName(secondState);
+	int combinedLen = strlen(firstName) + strlen(secondName) + 4; //4 = 2 spaces + '-' + '\0'
+	char* friendlyString = malloc(sizeof(char) * combinedLen);
+	strcpy(friendlyString, firstName);
+	strcat(friendlyString, FRIENDLY_SEPERATOR);
+	strcat(friendlyString, secondName);	
+	return friendlyString;
+}
+
 static void freeString(char* str) {
 	free(str);
 }
 
-ListElement copyString(ListElement str) {
+char* copyString(char* str) {
 	if (str == NULL) return NULL;
 	char* copy = malloc(strlen(str) + 1);
 	return copy ? strcpy(copy, str) : NULL;
@@ -93,6 +111,8 @@ void eurovisionDestroy(Eurovision eurovision) {
 	listDestroy(eurovision->judgesList);
 	free(eurovision);
 }
+
+
 
 EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	const char* judgeName,
@@ -217,20 +237,24 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	double totalStateScore = 0;
 	List rank = listCopy(eurovision->statesList);
 	if (listGetSize(rank) == 0) return rank;
+	sumAllResults(eurovision);
 	LIST_FOREACH(State, rankedState, rank) {
 		audienceTotal = 0;
 		judgesTotal = 0;
 		LIST_FOREACH(State, rankingState, eurovision->statesList) {
-			sumResultsFromState(rankingState);
-			audienceTotal += getResultFromStateToState(rankingState, rankedState);
+			if (getResultFromStateToState(rankingState, getStateId(rankedState)) != -1) {
+				audienceTotal += getResultFromStateToState(rankingState, getStateId(rankedState));
+			}
 		}
+		//printf("====================Audience total: %d====================\n", audienceTotal);
 		LIST_FOREACH(Judge, rankingJudge, eurovision->judgesList) {
 			judgesTotal += getResultFromJudge(rankingJudge, getStateId(rankedState));
 		}
-		audienceAvarage = (double)audienceTotal / (double)listGetSize(eurovision->statesList);
+		audienceAvarage = (double)audienceTotal / (double)(listGetSize(eurovision->statesList) - 1);
 		judgesAvarage = (double)judgesTotal / (double)listGetSize(eurovision->judgesList);
-		printf("ID: %d\n	Audience total: %d\n	Judges total: %d\n", \
+		//printf("ID: %d\n	Audience total: %d\n	Judges total: %d\n", \
 			getStateId(rankedState), audienceTotal, judgesTotal);
+		//printf("	audience avarage: %.2f\n	judges Avg: %.2f\n", audienceAvarage, judgesAvarage);
 		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, judgesAvarage);
 		setTotalScore(rankedState, totalStateScore);
 	}
@@ -250,4 +274,34 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 
 List eurovisionRunAudienceFavorite(Eurovision eurovision) {
 	return eurovisionRunContest(eurovision, 100);
+}
+
+List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
+	sumAllResults(eurovision);
+	int firstStateId = -1, secondStateId = -1;
+	char* str = NULL;
+	State secondState = NULL;
+	List friendlyStates = listCreate(copyString, freeString);
+	LIST_FOREACH(State, iterator, eurovision->statesList) {
+		firstStateId = getStateId(iterator);
+		secondStateId = getAllResultsFromState(iterator)[0];
+		if (secondStateId == -1) continue;
+		secondState = getStateFromId(eurovision, secondStateId);
+		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
+			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
+			if (strcmp(getStateName(iterator),getStateName(secondState)) < 0)
+				str = createFriendlyString(iterator, secondState);
+			else 
+				str = createFriendlyString(secondState, iterator);
+			listInsertLast(friendlyStates, str);
+			free(str);
+			setFriendlied(iterator, true);
+			setFriendlied(secondState, true);
+		}
+	}
+	listSort(friendlyStates, strcmp);
+	LIST_FOREACH(State, iterator, eurovision->statesList) {
+		setFriendlied(iterator, false);
+	}
+	return friendlyStates;
 }

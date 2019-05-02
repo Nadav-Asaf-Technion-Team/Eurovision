@@ -16,6 +16,7 @@ struct State_t {
 	const char* songName;
 	Map stateVotes;
 	int* stateResults;
+	bool friendlied;
 };
 
 //=================================test function=================================
@@ -30,6 +31,10 @@ void checkSumResultsAux(State state) {
 	MAP_FOREACH(int*, currentId, state->stateVotes) {
 		printf("current id (after sum results): %d\n", *currentId);
 	}
+}
+
+Map getVotesFromState(State state) {
+	return state->stateVotes;
 }
 //===============================end of test function=========================
 
@@ -85,6 +90,10 @@ State stateCreate(int stateId, const char* stateName, const char* songName) {
 	state->songName = songName;
 	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareInts);
 	state->stateResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
+	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
+		state->stateResults[i] = -1;
+	}
+	state->friendlied = false;
 	return state;
 }
 
@@ -121,6 +130,17 @@ StateResult setTotalScore(State state, double totalScore) {
 	if (state == NULL) return STATE_NULL_ARGUMENT;
 	state->totalScore = totalScore;
 	return MAP_SUCCESS;
+}
+
+StateResult setFriendlied(State state, bool value) {
+	if (state == NULL) return STATE_NULL_ARGUMENT;
+	state->friendlied = value;
+	return STATE_SUCCESS;
+}
+
+bool isFriendlied(State state) {
+	if (state == NULL) return false;
+	return state->friendlied;
 }
 
 int* getAllResultsFromState(State state) {
@@ -172,13 +192,15 @@ void removeVoteFromState(State stateGiver, int stateTakerId) {
 
 //under check
 void sumResultsFromState(State state) {
+	if (mapGetSize(state->stateVotes) == 0) return;
 	mapSortByKey(state->stateVotes);
-	printf("==============sorted by key===================\n");
+	//printf("==============sorted by key===================\n");
 	mapSortByDataForInt(state->stateVotes);
-	printf("==============sorted by data===================\n");
+	//printf("==============sorted by data===================\n");
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
+	//printf("iterator is mapGetFirst: %p\n", iterator);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
-		(state->stateResults)[i] = *(int*)mapGet(state->stateVotes, iterator);
+		(state->stateResults)[i] = *(int*)iterator;
 		iterator = mapGetNext(state->stateVotes);
 		if (iterator == NULL) break;
 
@@ -191,27 +213,31 @@ int getResultFromStateToState(State stateGiver, int stateTakerId) {
 	int* results = stateGiver->stateResults;
 	bool inArray = false;
 	int index = 0;
+	//printf("State take ID is %d, results[0] is %d\n", stateTakerId, results[0]);
 	for (index = 0; index < NUMBER_OF_RESULTS_PER_STATE; index++) {
-		if (results[index] = stateTakerId) {
+		//printf("Iteration %d\n", index);
+		//printf("+++++++++++++++++++++++++++++++++++++++++Entered for+++++++++++++++++++++++++\n");
+		if (results[index] == stateTakerId) {
 			inArray = true;
 			break;
 		}
 	}
+	//printf("Returning votes from state to state, index is %d\n", index);
 	if (!inArray) return 0;
 	else {
 		switch (index)
 		{
-		case 0: return 12;
-		case 1:	return 10;
-		case 2: return 8;
-		case 3: return 7;
-		case 4: return 6;
-		case 5: return 5;
-		case 6: return 4;
-		case 7: return 3;
-		case 8: return 2;
-		case 9: return 1;
-		default: break;
+			case 0: return 12;
+			case 1:	return 10;
+			case 2: return 8;
+			case 3: return 7;
+			case 4: return 6;
+			case 5: return 5;
+			case 6: return 4;
+			case 7: return 3;
+			case 8: return 2;
+			case 9: return 1;
+			default: break;
 		}
 	}
 	return 0;

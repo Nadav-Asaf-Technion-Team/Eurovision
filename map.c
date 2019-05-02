@@ -233,11 +233,16 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
 static void mapBubble(Map map, Node firstNode, Node secondNode) {
 	if (!map || !firstNode || !secondNode) return;
 	Node previous = map->head;
+	if (map->head == firstNode) {
+		map->head = secondNode;
+		firstNode->next = secondNode->next;
+		secondNode->next = firstNode;
+		return;
+	}
 	while (previous->next) {
 		if (previous->next == firstNode) break;
 		previous = previous->next;
 	}
-	if (map->head == firstNode) map->head = secondNode;
 	if (previous->next) {
 		previous->next = secondNode;
 		firstNode->next = secondNode->next;
@@ -277,7 +282,7 @@ void mapSortByKey(Map map) {
 			if (map->compareKeyElements(node->next->key_element, node->key_element) < 0) {
 				mapBubble(map, node, node->next);
 			}
-			node = node->next;
+			else node = node->next;
 		}
 		iterationSize--;
 	}
@@ -288,11 +293,16 @@ void mapSortByDataForInt(Map map) {
 	int iterationSize = mapGetSize(map) - 1;
 	for (int i = 0; i < mapGetSize(map); i++) {
 		node = map->head;
-		for (int j = 0; j < iterationSize; j++) {
+		for (int j = 0; j < iterationSize - 1; j++) {
+			//printNode(node);
 			if (map->compareKeyElements(node->next->data_element, node->data_element) > 0) {
 				mapBubble(map, node, node->next);
+				/*MAP_FOREACH(int*, iterator, map) {
+					printf("iterator is %d\n", *iterator);
+				}
+				printf("iteration over\n");*/
 			}
-			node = node->next;
+			else node = node->next;
 		}
 		iterationSize--;
 	}
