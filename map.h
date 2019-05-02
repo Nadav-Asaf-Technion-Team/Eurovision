@@ -1,8 +1,10 @@
 #ifndef MAP_H_
 #define MAP_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 #include <stdbool.h>
-
 /**
 * Generic Map Container
 *
