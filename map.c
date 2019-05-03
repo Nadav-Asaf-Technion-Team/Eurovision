@@ -147,7 +147,9 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
 	if (mapContains(map, keyElement)) {
 		Node node = searchByKey(map, keyElement);
+		MapDataElement to_delete = node->data_element;
 		node->data_element = dataElement_cpy;
+		map->freeDataElement(to_delete);
 		return MAP_SUCCESS;
 	}
 	MapKeyElement keyElement_cpy = map->copyKeyElement(keyElement);

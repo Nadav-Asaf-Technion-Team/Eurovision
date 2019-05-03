@@ -156,11 +156,10 @@ State stateCopy(State state) {
 	const char* newSong = getSongName(state);
 	const char* newStateName = getStateName(state);
 	Map newVotes = mapCopy(state->stateVotes);
-	int* newResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
-	if (copyStateResults(newResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
 	State newState = stateCreate(newId, newStateName, newSong);
+	if (newState == NULL) return NULL;
 	newState->stateVotes = newVotes;
-	newState->stateResults = newResults;
+	if (copyStateResults(newState->stateResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
 	newState->totalScore = state->totalScore;
 	return newState;
 }
@@ -173,6 +172,7 @@ StateResult addVoteFromState(State stateGiver, int stateTakerId) {
 	}
 	else current = 1;
 	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == MAP_OUT_OF_MEMORY) {
+
 		return STATE_OUT_OF_MEMORY;
 	}
 	return STATE_SUCCESS;
