@@ -93,11 +93,20 @@ static void freeString(char* str) {
 	free(str);
 }
 
-char* copyString(char* str) {
+static char* copyString(char* str) {
 	if (str == NULL) return NULL;
 	char* copy = malloc(strlen(str) + 1);
 	if (copy == NULL) return NULL;
 	return copy ? strcpy(copy, str) : NULL;
+}
+
+static bool checkIdDuplicates(int* array) {
+	for (int i = 0; i < STATES_TO_SCORE; i++) {
+		for (int j = i + 1; j < STATES_TO_SCORE; j++) {
+			if (array[i] == array[j])	return true;
+		}
+	}
+	return false;
 }
 
 Eurovision eurovisionCreate() {
@@ -120,6 +129,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	const char* judgeName, int* judgeResults) {
 	if (eurovision == NULL || judgeName == NULL || judgeResults == NULL) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(judgeId)) return EUROVISION_INVALID_ID;
+	if (checkIdDuplicates(judgeResults)) return EUROVISION_INVALID_ID;
 	if (!isNameValid(judgeName)) return EUROVISION_INVALID_NAME;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		if (!isIdValid(judgeResults[i])) return EUROVISION_INVALID_ID;
@@ -225,7 +235,7 @@ static State getStateFromId(Eurovision eurovision, int stateId) {
 }
 EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int stateTaker) {
 	/*input check*/
-	if (!eurovision || !stateGiver || !stateTaker) return EUROVISION_NULL_ARGUMENT;
+	if (!eurovision) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
 	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
 		return EUROVISION_STATE_NOT_EXIST;
@@ -243,7 +253,7 @@ EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int sta
 EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	int stateTaker){
 	/*input check*/
-	if (!eurovision || !stateGiver || !stateTaker) return EUROVISION_NULL_ARGUMENT;
+	if (!eurovision) return EUROVISION_NULL_ARGUMENT;
 	if (!isIdValid(stateGiver) || !isIdValid(stateTaker)) return EUROVISION_INVALID_ID;
 	if (!stateExist(eurovision, stateGiver) || !stateExist(eurovision, stateTaker)) {
 		return EUROVISION_STATE_NOT_EXIST;
@@ -283,8 +293,12 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 			judgesTotal += getResultFromJudge(rankingJudge, getStateId(rankedState));
 		}
 		audienceAvarage = (double)audienceTotal / (double)(listGetSize(eurovision->statesList) - 1);
-		judgesAvarage = (double)judgesTotal / (double)listGetSize(eurovision->judgesList);
+		if (listGetSize(eurovision->judgesList) != 0)
+			judgesAvarage = (double)judgesTotal / (double)listGetSize(eurovision->judgesList);
+		else 
+			judgesAvarage = 0;
 		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, judgesAvarage);
+		//printf("State is %s,\n	audience total: %.2f\n", getStateName(rankedState), audienceAvarage);
 		setTotalScore(rankedState, totalStateScore);
 	}
 	if (listSort(rank, (CompareListElements)compareStatesByScore) == LIST_OUT_OF_MEMORY) {
