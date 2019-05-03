@@ -38,6 +38,9 @@
   <ItemGroup>
     <Library Include="libmtm.a" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="makefile" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{465998AC-3443-443A-9AC9-B6778DB9EA55}</ProjectGuid>
