@@ -258,8 +258,9 @@ bool testFriendly() {
         eurovisionAddVote(eurovision, i+1, i);
     }
     listDestroy(result);
-    printf("Testing all are friendlies: ");
+    printf("Testing all are friendlies: \n");
     result = eurovisionRunGetFriendlyStates(eurovision);
+	printf("Friendlist size is %d\n", listGetSize(result));
     CHECK(listGetSize(result), 5);
     char* current;
     current = (char*)listGetFirst(result);

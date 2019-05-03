@@ -278,7 +278,7 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		eurovisionDestroy(eurovision);
 		return NULL;
 	}
-	if (listGetSize(rank) == 0) return rank;
+	if (listGetSize(rank) < 2) return rank;
 	sumAllResults(eurovision);
 	LIST_FOREACH(State, rankedState, rank) {
 		audienceTotal = 0;
@@ -345,6 +345,7 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 		secondState = getStateFromId(eurovision, secondStateId);
 		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
 			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
+			//printf("Found friendlies: %d and %d\n", firstStateId, secondStateId);
 			if (strcmp(getStateName(iterator),getStateName(secondState)) < 0)
 				str = createFriendlyString(iterator, secondState);
 			else 
