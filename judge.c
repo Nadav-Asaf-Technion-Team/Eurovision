@@ -8,7 +8,9 @@ struct Judge_t {
 
 Judge judgeCreate(int judgeId, const char* judgeName, int* judgeResults) {
 	Judge judge = malloc(sizeof(*judge));
-	if (judge == NULL) return NULL;
+	if (judge == NULL) {
+		return NULL;
+	}
 	judge->judgeId = judgeId;
 	judge->judgeName = judgeName;
 	judge->judgeResults = judgeResults;

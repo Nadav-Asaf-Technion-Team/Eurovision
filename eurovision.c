@@ -136,6 +136,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	}
 	Judge judge = judgeCreate(judgeId, judgeName, newResults);
 	if (judge == NULL) {
+		free(newResults);
 		eurovisionDestroy(eurovision);
 		return EUROVISION_OUT_OF_MEMORY;
 	}
@@ -144,6 +145,7 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 		eurovisionDestroy(eurovision);
 		return EUROVISION_OUT_OF_MEMORY;
 	}
+	judgeDestroy(judge);
 	return EUROVISION_SUCCESS;
 }
 
@@ -179,6 +181,7 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const ch
 		eurovisionDestroy(eurovision);
 		return EUROVISION_OUT_OF_MEMORY;
 	}
+	stateDestroy(currentState);
 	return EUROVISION_SUCCESS;
 }
 
