@@ -61,13 +61,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="libmtm.a">
-      <Filter>Resource Files</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="makefile">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libmtm.a">
+      <Filter>Resource Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>

@@ -165,27 +165,32 @@ State stateCopy(State state) {
 	return newState;
 }
 
-void addVoteFromState(State stateGiver, int stateTakerId) {
+StateResult addVoteFromState(State stateGiver, int stateTakerId) {
 	int current = 0;
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current++;
 	}
 	else current = 1;
-	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
+	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == MAP_OUT_OF_MEMORY) {
+		return STATE_OUT_OF_MEMORY;
+	}
+	return STATE_SUCCESS;
 }
 
-void removeVoteFromState(State stateGiver, int stateTakerId) {
+StateResult removeVoteFromState(State stateGiver, int stateTakerId) {
 	int current = 0;
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current--;
 	}
 	else current = 0;
-	mapPut(stateGiver->stateVotes, &stateTakerId, &current);
+	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == MAP_OUT_OF_MEMORY) {
+		return STATE_OUT_OF_MEMORY;
+	}
+	return STATE_SUCCESS;
 }
 
-//under check
 void sumResultsFromState(State state) {
 	if (mapGetSize(state->stateVotes) == 0) return;
 	mapSortByKey(state->stateVotes);

@@ -11,6 +11,7 @@ typedef struct State_t* State;
 
 typedef enum stateResult_t {
 	STATE_NULL_ARGUMENT,
+	STATE_OUT_OF_MEMORY,
 	STATE_INVALID_NAME,
 	STATE_NOT_EXIST,
 	STATE_SUCCESS
@@ -115,7 +116,7 @@ adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to give a vote
 @param stateTakerId - id of the state to whom you want to give a vote
 */
-void addVoteFromState(State stateGiver, int stateTakerId);
+StateResult addVoteFromState(State stateGiver, int stateTakerId);
 
 State stateCopy(State state);
 
@@ -124,7 +125,7 @@ deducts 1 from the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to deduct a vote
 @param stateTakerId - id of the state to whom you want to deduct a vote
 */
-void removeVoteFromState(State stateGiver, int stateTakerId);
+StateResult removeVoteFromState(State stateGiver, int stateTakerId);
 
 /**
 sums all the raw votes of state into an arrrey of the first 10 hightest scored states

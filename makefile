@@ -1,7 +1,7 @@
 CC = gcc
 OBJS = eurovision.o libmtm.a eurovisionTests.o eurovisionTestsMain.o judge.o map.o state.o
 EXEC = eurovisionContestMakefile
-COMP_FLAG = -std=c99 -Wall -pedantic-errors -Werror -DNDEBUG
+COMP_FLAG = -std=c99 -Wall -g -pedantic-errors -Werror -DNDEBUG
 
 $(EXEC) : $(OBJS)
 	$(CC) $(COMP_FLAG) $(OBJS) -o $@
