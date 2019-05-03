@@ -84,7 +84,15 @@ State stateCreate(int stateId, const char* stateName, const char* songName) {
 	state->stateName = stateName;
 	state->songName = songName;
 	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareInts);
+	if (state->stateVotes == NULL) {
+		stateDestroy(state);
+		return NULL;
+	}
 	state->stateResults = malloc(sizeof(int) * NUMBER_OF_RESULTS_PER_STATE);
+	if (state->stateResults == NULL) {
+		stateDestroy(state);
+		return NULL;
+	}
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		state->stateResults[i] = -1;
 	}
@@ -156,10 +164,21 @@ State stateCopy(State state) {
 	const char* newSong = getSongName(state);
 	const char* newStateName = getStateName(state);
 	Map newVotes = mapCopy(state->stateVotes);
+	if (newVotes == NULL) {
+		return NULL;
+	}
 	State newState = stateCreate(newId, newStateName, newSong);
-	if (newState == NULL) return NULL;
+	if (newState == NULL) {
+		mapDestroy(newVotes);
+		return NULL;
+	}
+	Map toDelete = newState->stateVotes;
 	newState->stateVotes = newVotes;
-	if (copyStateResults(newState->stateResults, getAllResultsFromState(state)) != STATE_SUCCESS) return NULL;
+	mapDestroy(toDelete);
+	if (copyStateResults(newState->stateResults, getAllResultsFromState(state)) != STATE_SUCCESS) {
+		stateDestroy(newState);
+		return NULL;
+	}
 	newState->totalScore = state->totalScore;
 	return newState;
 }
