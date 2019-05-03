@@ -28,10 +28,10 @@
     <ClInclude Include="state.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\tests\main.c" />
     <ClCompile Include="eurovision.c" />
     <ClCompile Include="eurovisionTests.c" />
     <ClCompile Include="judge.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="map.c" />
     <ClCompile Include="state.c" />
   </ItemGroup>

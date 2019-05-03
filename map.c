@@ -67,7 +67,6 @@ Map mapCreate(copyMapDataElements copyDataElement,
 MapResult mapClear (Map map){
     if (!map) return MAP_NULL_ARGUMENT;
     Node ptr = map->head;
-	Node temp = ptr;
     while (ptr) {
         Node to_delete = ptr;
         ptr = ptr->next;
@@ -246,29 +245,29 @@ static void mapBubble(Map map, Node firstNode, Node secondNode) {
 		secondNode->next = firstNode;
 	}
 }
-static void printNode(Node node) {
-	if (node != NULL) {
-		printf("node is: %p\n", node);
-		if (node->key_element != NULL)
-			printf("	node->keyElement is: %d\n", *(int*)node->key_element);
-		else printf("	node->keyElement is null\n");
-		if(node->data_element != NULL)
-			printf("	node->dataElement is: %d\n", *(int*)node->data_element);
-		else printf("	node->dataElement is null\n");
-
-		if (node->next != NULL) {
-			printf("	node->next is: %p\n", node->next);
-			if (node->next->key_element != NULL)
-				printf("	node->next->keyElement is: %d\n", *(int*)node->next->key_element);
-			else printf("	node->next->keyElement is null\n");
-			if (node->next->data_element != NULL)
-				printf("	node->next->dataElement is: %d\n", *(int*)node->next->data_element);
-			else printf("	node->next->dataElement is null\n");
-		}
-		else printf("	node->next is null\n");
-	}
-	else printf("node is null\n");
-}
+//static void printNode(Node node) {
+//	if (node != NULL) {
+//		printf("node is: %p\n", node);
+//		if (node->key_element != NULL)
+//			printf("	node->keyElement is: %d\n", *(int*)node->key_element);
+//		else printf("	node->keyElement is null\n");
+//		if(node->data_element != NULL)
+//			printf("	node->dataElement is: %d\n", *(int*)node->data_element);
+//		else printf("	node->dataElement is null\n");
+//
+//		if (node->next != NULL) {
+//			printf("	node->next is: %p\n", node->next);
+//			if (node->next->key_element != NULL)
+//				printf("	node->next->keyElement is: %d\n", *(int*)node->next->key_element);
+//			else printf("	node->next->keyElement is null\n");
+//			if (node->next->data_element != NULL)
+//				printf("	node->next->dataElement is: %d\n", *(int*)node->next->data_element);
+//			else printf("	node->next->dataElement is null\n");
+//		}
+//		else printf("	node->next is null\n");
+//	}
+//	else printf("node is null\n");
+//}
 //sorts the map by key from small to large
 void mapSortByKey(Map map) {
 	Node node = map->head;

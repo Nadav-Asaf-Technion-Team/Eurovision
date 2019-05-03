@@ -72,9 +72,9 @@ static int compareInts(MapKeyElement n1, MapKeyElement n2) {
 	return (*(int*)n1 - *(int*)n2);
 }
 
-static int compareIntsReversed(MapKeyElement n1, MapKeyElement n2) {
-	return (*(int*)n2 - *(int*)n1);
-}
+//static int compareIntsReversed(MapKeyElement n1, MapKeyElement n2) {
+//	return (*(int*)n2 - *(int*)n1);
+//}
 /*===========================end of implimantation======================================*/
 State stateCreate(int stateId, const char* stateName, const char* songName) {
 	State state = malloc(sizeof(*state));
@@ -239,7 +239,7 @@ int getResultFromStateToState(State stateGiver, int stateTakerId) {
 }
 
 int getVoteFromStateToState(State stateGiver, int stateTakerId) {
-	int votes = mapGet(stateGiver->stateVotes, &stateTakerId);
+	int* votes = mapGet(stateGiver->stateVotes, &stateTakerId);
 	if (votes == NULL) return NO_VOTES;
 	return *(int*)votes;
 }

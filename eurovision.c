@@ -78,7 +78,8 @@ static void sumAllResults(Eurovision eurovision) {
 }
 
 static char* createFriendlyString(State firstState, State secondState) {
-	char* firstName = getStateName(firstState), *secondName = getStateName(secondState);
+	const char* firstName = getStateName(firstState);
+	const char* secondName = getStateName(secondState);
 	int combinedLen = strlen(firstName) + strlen(secondName) + 4; //4 = 2 spaces + '-' + '\0'
 	char* friendlyString = malloc(sizeof(char) * combinedLen);
 	strcpy(friendlyString, firstName);
@@ -100,8 +101,8 @@ char* copyString(char* str) {
 Eurovision eurovisionCreate() {
 	Eurovision eurovision = malloc(sizeof(*eurovision));
 	if (eurovision == NULL) return NULL;
-	eurovision->statesList = listCreate(stateCopy, stateDestroy);
-	eurovision->judgesList = listCreate(judgeCopy, judgeDestroy);
+	eurovision->statesList = listCreate((CopyListElement)stateCopy, (FreeListElement)stateDestroy);
+	eurovision->judgesList = listCreate((CopyListElement)judgeCopy, (FreeListElement)judgeDestroy);
 	return eurovision;
 }
 
@@ -193,12 +194,14 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 		}
 		return EUROVISION_SUCCESS;
 	}
+	return EUROVISION_STATE_NOT_EXIST;
 }
 
 static State getStateFromId(Eurovision eurovision, int stateId) {
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
 		if (getStateId(currentState) == stateId) return currentState;
 	}
+	return NULL;
 }
 EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int stateTaker) {
 	/*input check*/
@@ -251,21 +254,16 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		}
 		audienceAvarage = (double)audienceTotal / (double)(listGetSize(eurovision->statesList) - 1);
 		judgesAvarage = (double)judgesTotal / (double)listGetSize(eurovision->judgesList);
-		//printf("ID: %d\n	Audience total: %d\n	Judges total: %d\n", \
-			getStateId(rankedState), audienceTotal, judgesTotal);
-		//printf("	audience avarage: %.2f\n	judges Avg: %.2f\n", audienceAvarage, judgesAvarage);
 		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, judgesAvarage);
 		setTotalScore(rankedState, totalStateScore);
 	}
-	if (listSort(rank, compareStatesByScore) != LIST_SUCCESS) {
+	if (listSort(rank, (CompareListElements)compareStatesByScore) != LIST_SUCCESS) {
 		return NULL;
 	}
-	List rankByName = listCreate(copyString, freeString);
+	List rankByName = listCreate((CopyListElement)copyString, (FreeListElement)freeString);
 	if (rankByName == NULL) return NULL;
 	LIST_FOREACH(State, currentState, rank) {
-		/*printf("name is: %s\n", getStateName(currentState));
-		printf("	score is %.2f\n", getTotalScore(currentState));*/
-		listInsertLast(rankByName, getStateName(currentState));
+		listInsertLast(rankByName, (char*)getStateName(currentState));
 	}
 	listDestroy(rank);
 	return rankByName;
@@ -280,7 +278,7 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 	int firstStateId = -1, secondStateId = -1;
 	char* str = NULL;
 	State secondState = NULL;
-	List friendlyStates = listCreate(copyString, freeString);
+	List friendlyStates = listCreate((CopyListElement)copyString, (FreeListElement)freeString);
 	LIST_FOREACH(State, iterator, eurovision->statesList) {
 		firstStateId = getStateId(iterator);
 		secondStateId = getAllResultsFromState(iterator)[0];
@@ -298,7 +296,7 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 			setFriendlied(secondState, true);
 		}
 	}
-	listSort(friendlyStates, strcmp);
+	listSort(friendlyStates, (CompareListElements)strcmp);
 	LIST_FOREACH(State, iterator, eurovision->statesList) {
 		setFriendlied(iterator, false);
 	}
