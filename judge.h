@@ -7,7 +7,22 @@
 #include <stdbool.h>
 #include <string.h>
 #define STATES_TO_SCORE 10
-/*Asaf */
+
+/**
+* judge struct
+*
+* Implements a judge struct type for a eurovision contest.
+*
+* The following functions are available:
+*   judgeCreate			- Creates a new empty judge
+*   judgeDestroy		- Deletes an existing judge and frees all resources
+*	getJudgeId			- returns the judge ID as an int
+*	getJudgeName		- returns the states name as a char*
+*	getJudgeResults		- returns the final results given from said judge as a size 10 int*
+*	stateCopy			- copies an existing judge struct
+
+*/
+
 typedef struct Judge_t* Judge;
 
 typedef enum judgeResult_t {
