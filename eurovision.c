@@ -352,8 +352,6 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 		secondStateId = getAllResultsFromState(iterator)[0];
 		if (secondStateId == -1) continue;
 		secondState = getStateFromId(eurovision, secondStateId);
-		printf("%s gave 12 points to %d\n", getStateName(secondState), \
-			getAllResultsFromState(secondState)[0]);
 		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
 			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
 			//printf("Found friendlies: %d and %d\n", firstStateId, secondStateId);
