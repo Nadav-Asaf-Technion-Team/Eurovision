@@ -7,6 +7,37 @@
 #include <stdbool.h>
 #include <string.h>
 
+/**
+* state struct
+*
+* Implements a state struct type for a eurovision contest.
+*
+* The following functions are available:
+*   stateCreate			- Creates a new empty state
+*   stateDestroy		- Deletes an existing state and frees all resources
+*	getStateId			- returns the states ID as an int
+*	getStateName		- returns the states name as a char*
+*	getSongName			- returns the states song name as a char*
+*	getTotalScore		- returns the total score that a state got at the end of the contest
+*						as a double
+*	setTotalScore		- allows the user to insert to the state struct its current total score
+*	setFriendlied		- allows the user to flag the states as a part of a frienly states pair
+*	isFriendlied		- returns the status of the friendlied flag as bool
+*	stateCopy			- copies an existing state struct
+*	addVoteFromState	- add 1 to the taker states vote counter of the giver state 
+*	removeVoteFromState - removes 1 from the taker states vote counter of the giver state
+*	sumResultsFromState	- sums up the entire raw votes the the state gave into a reachble 10 size array 
+*						  of final results given from this state
+*	getAllResultsFromState 
+*						- returns the final results given from said state size 10 int array
+*	getResultFromStateToState
+*						- returns the final result given from the giver state to the taker
+*	getVoteFromStateToState
+*						- returns the raw votes given from the giver state to the taker
+*	removeAllVotesFromStateToState
+*						- removes all raw votes given from the giver state to the taker
+	
+*/
 typedef struct State_t* State;
 
 typedef enum stateResult_t {
@@ -111,6 +142,8 @@ already counted as another state's friend.
 	apropriate value otherwise.
 */
 bool isFriendlied(State state);
+
+State stateCopy(State state);
 /**
 adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to give a vote
@@ -118,7 +151,6 @@ adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 */
 StateResult addVoteFromState(State stateGiver, int stateTakerId);
 
-State stateCopy(State state);
 
 /**
 deducts 1 from the vote count for stateTaker in the map of votes of stateGiver
