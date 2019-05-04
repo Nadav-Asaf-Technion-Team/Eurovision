@@ -291,7 +291,7 @@ void mapSortByDataForInt(Map map) {
 	int iterationSize = mapGetSize(map) - 1;
 	for (int i = 0; i < mapGetSize(map); i++) {
 		node = map->head;
-		for (int j = 0; j < iterationSize - 1; j++) {
+		for (int j = 0; j < iterationSize - 1; j++) { //if mapGetSize = 2, loop doesn't begin at all
 			//printNode(node);
 			if (map->compareKeyElements(node->next->data_element, node->data_element) > 0) {
 				mapBubble(map, node, node->next);
