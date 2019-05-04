@@ -90,6 +90,7 @@ static void sumAllResults(Eurovision eurovision) {
 }
 
 static char* createFriendlyString(State firstState, State secondState) {
+	//printf("Entered create string\n");
 	const char* firstName = getStateName(firstState);
 	const char* secondName = getStateName(secondState);
 	int combinedLen = strlen(firstName) + strlen(secondName) + 4; //4 = 2 spaces + '-' + '\0'
@@ -236,6 +237,8 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 	return EUROVISION_SUCCESS; 
 }
 
+//returns state element according to ID. state's list internal iterator is 
+//undefined after using this function
 static State getStateFromId(Eurovision eurovision, int stateId) {
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
 		if (getStateId(currentState) == stateId) return currentState;
@@ -337,6 +340,12 @@ List eurovisionRunAudienceFavorite(Eurovision eurovision) {
 	return eurovisionRunContest(eurovision, 100);
 }
 
+static void resetIteratorTo(List list, State iterator) {
+	LIST_FOREACH(State, i, list) {
+		if (i == iterator) break;
+	}
+}
+
 List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 	sumAllResults(eurovision);
 	int firstStateId = -1, secondStateId = -1;
@@ -347,14 +356,24 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 		eurovisionDestroy(eurovision);
 		return NULL;
 	}
+	////to remove
+	//LIST_FOREACH(State, state, eurovision->statesList) {
+	//	printf("is friendlied: %d\n", isFriendlied(state));
+	//}
+	////to remove
 	LIST_FOREACH(State, iterator, eurovision->statesList) {
+		//printf("Entered foreach\n");
 		firstStateId = getStateId(iterator);
 		secondStateId = getAllResultsFromState(iterator)[0];
+	//	printf("state ids are %d, %d\n", firstStateId, secondStateId);
 		if (secondStateId == -1) continue;
+	//	printf("passed continue\n");
+		State currentIterator = iterator;
 		secondState = getStateFromId(eurovision, secondStateId);
+		resetIteratorTo(eurovision->statesList, currentIterator);
 		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
 			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
-			//printf("Found friendlies: %d and %d\n", firstStateId, secondStateId);
+	//		printf("Found friendlies: %d and %d\n", firstStateId, secondStateId);
 			if (strcmp(getStateName(iterator),getStateName(secondState)) < 0)
 				str = createFriendlyString(iterator, secondState);
 			else 
@@ -373,6 +392,7 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 			setFriendlied(iterator, true);
 			setFriendlied(secondState, true);
 		}
+		//printf("Iterator next is %s\n", getStateName(listGetNext(eurovision->statesList)));
 	}
 	if (listSort(friendlyStates, (CompareListElements)strcmp) == LIST_OUT_OF_MEMORY) {
 		listDestroy(friendlyStates);
@@ -382,5 +402,6 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 	LIST_FOREACH(State, iterator, eurovision->statesList) {
 		setFriendlied(iterator, false);
 	}
+	//printf("returning list\n");
 	return friendlyStates;
 }
