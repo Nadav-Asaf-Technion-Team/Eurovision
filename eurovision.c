@@ -22,6 +22,18 @@ void checkSumResults(Eurovision eurovision, int stateId) {
 			
 	}
 }
+
+void printAllResults(Eurovision eurovision) {
+	int* results = NULL;
+	LIST_FOREACH(State, current, eurovision->statesList) {
+		printf("%s's results: \n", getStateName(current));
+		results = getAllResultsFromState(current);
+		for (int i = 0; i < STATES_TO_SCORE; i++) {
+			printf("%d, ", results[i]);
+		}
+		printf("\n");
+	}
+}
 //_______________end oftest functions___________
 
 static bool isIdValid(int id) {
@@ -169,9 +181,6 @@ EurovisionResult eurovisionRemoveJudge(Eurovision eurovision, int judgeId) {
 	}
 	return EUROVISION_SUCCESS;
 }
-
-//we need to check if its best to implimant the list of states as a map maybe
-//also we need to confirm that LIST_FOREACH works as expected
 
 EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId, const char *stateName, const char *songName) {
 	/*input check*/
@@ -343,6 +352,8 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 		secondStateId = getAllResultsFromState(iterator)[0];
 		if (secondStateId == -1) continue;
 		secondState = getStateFromId(eurovision, secondStateId);
+		printf("%s gave 12 points to %d\n", getStateName(secondState), \
+			getAllResultsFromState(secondState)[0]);
 		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
 			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
 			//printf("Found friendlies: %d and %d\n", firstStateId, secondStateId);

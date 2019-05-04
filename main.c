@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "list.h"
-#include "eurovision.h"
+#include "./eurovision.h"
 #include "eurovisionTests.h"
 
 #define POINTS_OPTIONS_NUMBER 10
@@ -258,8 +258,9 @@ bool testFriendly() {
         eurovisionAddVote(eurovision, i+1, i);
     }
     listDestroy(result);
-    printf("Testing all are friendlies: \n");
+    printf("Testing all are friendlies: ");
     result = eurovisionRunGetFriendlyStates(eurovision);
+	printAllResults(eurovision);
 	printf("Friendlist size is %d\n", listGetSize(result));
     CHECK(listGetSize(result), 5);
     char* current;

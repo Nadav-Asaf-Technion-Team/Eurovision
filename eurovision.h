@@ -26,6 +26,8 @@ int getAmountOfStates(Eurovision eurovision);
 
 void checkSumResults(Eurovision eurovision, int stateId);
 
+void printAllResults(Eurovision eurovision);
+
 //_______________end of test functions_________
 
 Eurovision eurovisionCreate(); //Asaf

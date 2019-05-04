@@ -72,9 +72,6 @@ static int compareInts(MapKeyElement n1, MapKeyElement n2) {
 	return (*(int*)n1 - *(int*)n2);
 }
 
-//static int compareIntsReversed(MapKeyElement n1, MapKeyElement n2) {
-//	return (*(int*)n2 - *(int*)n1);
-//}
 /*===========================end of implimantation======================================*/
 State stateCreate(int stateId, const char* stateName, const char* songName) {
 	State state = malloc(sizeof(*state));
@@ -213,35 +210,26 @@ StateResult removeVoteFromState(State stateGiver, int stateTakerId) {
 void sumResultsFromState(State state) {
 	if (mapGetSize(state->stateVotes) == 0) return;
 	mapSortByKey(state->stateVotes);
-	//printf("==============sorted by key===================\n");
 	mapSortByDataForInt(state->stateVotes);
-	//printf("==============sorted by data===================\n");
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
-	//printf("iterator is mapGetFirst: %p\n", iterator);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		(state->stateResults)[i] = *(int*)iterator;
 		iterator = mapGetNext(state->stateVotes);
 		if (iterator == NULL) break;
-
 	}
 }
-
 
 int getResultFromStateToState(State stateGiver, int stateTakerId) {
 	if (stateGiver == NULL) return -1;
 	int* results = stateGiver->stateResults;
 	bool inArray = false;
 	int index = 0;
-	//printf("State take ID is %d, results[0] is %d\n", stateTakerId, results[0]);
 	for (index = 0; index < NUMBER_OF_RESULTS_PER_STATE; index++) {
-		//printf("Iteration %d\n", index);
-		//printf("+++++++++++++++++++++++++++++++++++++++++Entered for+++++++++++++++++++++++++\n");
 		if (results[index] == stateTakerId) {
 			inArray = true;
 			break;
 		}
 	}
-	//printf("Returning votes from state to state, index is %d\n", index);
 	if (!inArray) return 0;
 	else {
 		switch (index)
