@@ -245,6 +245,7 @@ static State getStateFromId(Eurovision eurovision, int stateId) {
 	}
 	return NULL;
 }
+                                                                               
 EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,int stateTaker) {
 	/*input check*/
 	if (!eurovision) return EUROVISION_NULL_ARGUMENT;

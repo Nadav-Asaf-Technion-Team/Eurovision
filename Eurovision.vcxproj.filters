@@ -56,7 +56,7 @@
     <ClCompile Include="eurovisionTests.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
+    <ClCompile Include="..\tests\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
