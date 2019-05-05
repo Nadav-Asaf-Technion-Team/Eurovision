@@ -38,6 +38,7 @@ void printAllResults(Eurovision eurovision) {
 static void printWinners(List statesList) {
 	LIST_FOREACH(State, current, statesList) {
 		printf("state is: %s\n", getStateName(current));
+		printf("	its ID is: %d\n", getStateId(current));
 		printf("	its score is: %.4f\n", getTotalScore(current));
 	}
 }
@@ -261,7 +262,6 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 		}
 		return EUROVISION_SUCCESS;
 	}
-	printf("third list foreach\n");
 	return EUROVISION_SUCCESS; 
 }
 
@@ -293,7 +293,20 @@ EurovisionResult eurovisionAddVote(Eurovision eurovision, int stateGiver,
 	}
 	return EUROVISION_SUCCESS;
 }
-
+//returns a string list of states names out of states list
+static List convertToStringList(List states) {
+	List stringsList = listCreate((CopyListElement)copyString,
+		(FreeListElement)freeString);
+	if (stringsList == NULL) return NULL;
+	LIST_FOREACH(State, currentState, states) {
+		if (listInsertLast(stringsList, (char*)getStateName(currentState)) ==
+			LIST_OUT_OF_MEMORY) {
+			listDestroy(stringsList);
+			return NULL;
+		}
+	}
+	return stringsList;
+}
 EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	int stateTaker){
 	/*input check*/
@@ -324,7 +337,14 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		eurovisionDestroy(eurovision);
 		return NULL;
 	}
-	if (listGetSize(rank) < 2) return rank;
+	if (listGetSize(rank) < 2) {
+		List rankByName = convertToStringList(rank);
+		if (rankByName == NULL) {
+			listDestroy(rank);
+			eurovisionDestroy(eurovision);
+			return NULL;
+		}
+	}
 	sumAllResults(eurovision);
 	LIST_FOREACH(State, rankedState, rank) {
 		audienceTotal = 0;
@@ -356,21 +376,11 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		eurovisionDestroy(eurovision);
 		return NULL;
 	}
-	List rankByName = listCreate((CopyListElement)copyString,
-								(FreeListElement)freeString);
+	List rankByName = convertToStringList(rank);
 	if (rankByName == NULL) {
 		listDestroy(rank);
 		eurovisionDestroy(eurovision);
 		return NULL;
-	}
-	LIST_FOREACH(State, currentState, rank) {
-		if (listInsertLast(rankByName, (char*)getStateName(currentState)) == 
-			LIST_OUT_OF_MEMORY) {
-			listDestroy(rank);
-			listDestroy(rankByName);
-			eurovisionDestroy(eurovision);
-			return NULL;
-		}
 	}
 	listDestroy(rank);
 	return rankByName;

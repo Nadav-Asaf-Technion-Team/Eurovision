@@ -207,6 +207,7 @@ StateResult removeVoteFromState(State stateGiver, int stateTakerId) {
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current--;
+		if (current <= 0) current = 0;
 	} else {
 		current = 0;
 	}
