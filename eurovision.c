@@ -34,6 +34,13 @@ void printAllResults(Eurovision eurovision) {
 		printf("\n");
 	}
 }
+
+static void printWinners(List statesList) {
+	LIST_FOREACH(State, current, statesList) {
+		printf("state is: %s\n", getStateName(current));
+		printf("	its score is: %.4f\n", getTotalScore(current));
+	}
+}
 //_______________end oftest functions___________
 /*checks if an ID is valid under the given requirements*/
 static bool isIdValid(int id) {
@@ -140,6 +147,7 @@ Eurovision eurovisionCreate() {
 }
 
 void eurovisionDestroy(Eurovision eurovision) {
+	if (eurovision) return;
 	listDestroy(eurovision->statesList);
 	listDestroy(eurovision->judgesList);
 	free(eurovision);
@@ -303,8 +311,8 @@ EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 		return EUROVISION_OUT_OF_MEMORY;
 	}
 	return EUROVISION_SUCCESS;
-}
-														                       
+}	
+
 List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	if (eurovision == NULL || audiencePercent < 1 || audiencePercent > 100)
 		return NULL;
