@@ -284,7 +284,7 @@ EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	}
 	return EUROVISION_SUCCESS;
 }
-
+														                       
 List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	if (eurovision == NULL || audiencePercent < 1 || audiencePercent > 100) return NULL;
 	int audienceTotal = 0, judgesTotal = 0;

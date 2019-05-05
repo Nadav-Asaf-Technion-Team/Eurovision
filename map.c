@@ -230,7 +230,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
     return nodeRemove(map, searchByKey(map, keyElement)) ;
 }
 
-//================for eurovision use only====================
+//================eurovision patch====================
 
 //switches places between firstNode and secondNode in the map
 //first node is the first of the two before running the function
