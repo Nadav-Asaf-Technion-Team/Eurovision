@@ -160,6 +160,7 @@ static StateResult copyStateResults(int* destination, int* source) {
 	}
 	return STATE_SUCCESS;
 }
+
 State stateCopy(State state) {
 	if (state == NULL) return NULL;
 	int newId = getStateId(state);

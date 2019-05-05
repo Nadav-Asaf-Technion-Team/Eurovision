@@ -85,7 +85,14 @@ copies judge and returns the new judge.
 */
 Judge judgeCopy(Judge judge);
 
-//TODO: write description for function
-int getResultFromJudge(Judge judge, int stateId);
+/**
+checks the score given judge gave a given state (by state ID)
+@param judge - judge to check
+@param stateId - state ID of the state that got the score
+@return -
+	-1 if NULL was given as judge
+	0 if judge didn't score the state at all
+	number between 1-8, 10, 12 according to the score the judge gave the state
+*/int getResultFromJudge(Judge judge, int stateId);
 
 #endif /* JUDGE_H_ */

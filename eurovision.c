@@ -302,7 +302,7 @@ EurovisionResult eurovisionRemoveVote(Eurovision eurovision, int stateGiver,
 	}
 	return EUROVISION_SUCCESS;
 }
-
+														                       
 List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 	if (eurovision == NULL || audiencePercent < 1 || audiencePercent > 100)
 		return NULL;
@@ -390,12 +390,9 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 	}
 
 	LIST_FOREACH(State, iterator, eurovision->statesList) {
-		//printf("Entered foreach\n");
 		firstStateId = getStateId(iterator);
 		secondStateId = getAllResultsFromState(iterator)[0];
-	//	printf("state ids are %d, %d\n", firstStateId, secondStateId);
 		if (secondStateId == -1) continue;
-	//	printf("passed continue\n");
 		State currentIterator = iterator;
 		secondState = getStateFromId(eurovision, secondStateId);
 		resetIteratorTo(eurovision->statesList, currentIterator);

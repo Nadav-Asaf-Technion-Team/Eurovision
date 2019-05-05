@@ -8,7 +8,7 @@ typedef struct node{
 	struct node* next;
 } *Node;
 
-
+//creates a sigle node for the map
 static Node createNode(MapDataElement data_element, MapKeyElement key_element, 
 					   Node next) {
 	assert(data_element && key_element);
@@ -19,14 +19,14 @@ static Node createNode(MapDataElement data_element, MapKeyElement key_element,
 	node->next = NULL;
 	return node;
 }
-
+//destroys a single node
 static void destroyNode(Node node, freeMapDataElements freeDataElement,
 						freeMapKeyElements freeKeyElement) {
 	freeKeyElement(node->key_element);
 	freeDataElement(node->data_element);
 	free(node);
 }
-
+//copies a sigle node
 static Node copyNode(Node source_node, copyMapDataElements copyDataElement, 
 					 copyMapKeyElements copyKeyElement) {
 	Node node = createNode(copyDataElement(source_node->data_element),
@@ -114,6 +114,7 @@ int mapGetSize(Map map) {
 	return map->size;
 }
 
+//returns a Node element by its key
 static Node searchByKey(Map map, MapKeyElement element){
     if (!map || !element) return NULL;
     Node ptr = map->head;
@@ -234,7 +235,10 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
     return nodeRemove(map, searchByKey(map, keyElement)) ;
 }
 
-//================for eurovision use only====================
+//================eurovision patch====================
+
+//switches places between firstNode and secondNode in the map
+//first node is the first of the two before running the function
 static void mapBubble(Map map, Node firstNode, Node secondNode) {
 	if (!map || !firstNode || !secondNode) return;
 	Node previous = map->head;
@@ -277,6 +281,7 @@ static void mapBubble(Map map, Node firstNode, Node secondNode) {
 //	}
 //	else printf("node is null\n");
 //}
+
 //sorts the map by key from small to large
 void mapSortByKey(Map map) {
 	Node node = map->head;

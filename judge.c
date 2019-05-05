@@ -46,8 +46,6 @@ static JudgeResult copyJudgeResults(int* destination, int* source) {
 	return JUDGE_SUCCESS;
 }
 
-
-//no reason to use this
 Judge judgeCopy(Judge judge) {
 	if (judge == NULL) return NULL;
 	int newId = getJudgeId(judge);
