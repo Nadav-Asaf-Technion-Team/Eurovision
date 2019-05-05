@@ -9,7 +9,8 @@ typedef struct node{
 } *Node;
 
 
-static Node createNode(MapDataElement data_element, MapKeyElement key_element,  Node next) {
+static Node createNode(MapDataElement data_element, MapKeyElement key_element, 
+					   Node next) {
 	assert(data_element && key_element);
 	Node node = malloc(sizeof(*node)); 
 	if (node == NULL) return NULL;
@@ -19,13 +20,15 @@ static Node createNode(MapDataElement data_element, MapKeyElement key_element,  
 	return node;
 }
 
-static void destroyNode(Node node, freeMapDataElements freeDataElement, freeMapKeyElements freeKeyElement) {
+static void destroyNode(Node node, freeMapDataElements freeDataElement,
+						freeMapKeyElements freeKeyElement) {
 	freeKeyElement(node->key_element);
 	freeDataElement(node->data_element);
 	free(node);
 }
 
-static Node copyNode(Node source_node, copyMapDataElements copyDataElement, copyMapKeyElements copyKeyElement) {
+static Node copyNode(Node source_node, copyMapDataElements copyDataElement, 
+					 copyMapKeyElements copyKeyElement) {
 	Node node = createNode(copyDataElement(source_node->data_element),
 						   copyKeyElement(source_node->key_element), NULL);
 	return node;
@@ -48,7 +51,8 @@ Map mapCreate(copyMapDataElements copyDataElement,
 			  freeMapDataElements freeDataElement,
 			  freeMapKeyElements freeKeyElement,
 			  compareMapKeyElements compareKeyElements) {
-	if (!(copyDataElement && copyKeyElement && freeDataElement && freeKeyElement && compareKeyElements)) {
+	if (!(copyDataElement && copyKeyElement && freeDataElement
+		  && freeKeyElement && compareKeyElements)) {
 		return NULL;
 	}
 	Map map = malloc(sizeof(*map));
@@ -90,12 +94,14 @@ Map mapCopy(Map map) {
 	if (mapGetSize(map) == 0) {
 		return map_cpy;
 	}
-	map_cpy->head = copyNode(map->head, map->copyDataElement, map->copyKeyElement);
+	map_cpy->head = copyNode(map->head, map->copyDataElement,
+							 map->copyKeyElement);
 	map_cpy->size = map->size;
 	Node old_list_ptr = map->head->next;
 	Node new_list_ptr = map_cpy->head;
 	while (old_list_ptr){
-		new_list_ptr->next = copyNode(old_list_ptr, map->copyDataElement, map->copyKeyElement);
+		new_list_ptr->next = copyNode(old_list_ptr, map->copyDataElement,
+									  map->copyKeyElement);
 		old_list_ptr = old_list_ptr->next;
 		new_list_ptr = new_list_ptr->next;
 	}
@@ -141,7 +147,7 @@ bool mapContains (Map map, MapKeyElement element){
 	}
     return false;
 }
-MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) {
+MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement){
 	if (!(map && keyElement && dataElement)) return MAP_NULL_ARGUMENT;
 	MapDataElement dataElement_cpy = map->copyDataElement(dataElement);
 	if (dataElement_cpy == NULL) return MAP_OUT_OF_MEMORY;
@@ -167,7 +173,8 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement) 
 	Node current_node = map->head;
 	Node previous_node = map->head;
 	while (current_node != NULL &&
-		map->compareKeyElements(current_node->key_element, new_node->key_element) < 0) {
+		map->compareKeyElements(current_node->key_element,
+								new_node->key_element) < 0) {
 		previous_node = current_node;
 		current_node = current_node->next;
 	}
@@ -277,7 +284,8 @@ void mapSortByKey(Map map) {
 	for (int i = 0; i < mapGetSize(map); i++) {
 		node = map->head;
 		for (int j = 0; j < iterationSize; j++) {
-			if (map->compareKeyElements(node->next->key_element, node->key_element) < 0) {
+			if (map->compareKeyElements(node->next->key_element,
+				node->key_element) < 0) {
 				mapBubble(map, node, node->next);
 			}
 			else node = node->next;
@@ -291,14 +299,10 @@ void mapSortByDataForInt(Map map) {
 	int iterationSize = mapGetSize(map) - 1;
 	for (int i = 0; i < mapGetSize(map); i++) {
 		node = map->head;
-		for (int j = 0; j < iterationSize; j++) { //if mapGetSize = 2, loop doesn't begin at all
-			//printNode(node);
-			if (map->compareKeyElements(node->next->data_element, node->data_element) > 0) {
+		for (int j = 0; j < iterationSize; j++) { 
+			if (map->compareKeyElements(node->next->data_element,
+				node->data_element) > 0) {
 				mapBubble(map, node, node->next);
-				/*MAP_FOREACH(int*, iterator, map) {
-					printf("iterator is %d\n", *iterator);
-				}
-				printf("iteration over\n");*/
 			}
 			else node = node->next;
 		}

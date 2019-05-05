@@ -18,24 +18,34 @@
 *	getStateId			- returns the states ID as an int
 *	getStateName		- returns the states name as a char*
 *	getSongName			- returns the states song name as a char*
-*	getTotalScore		- returns the total score that a state got at the end of the contest
-*						as a double
-*	setTotalScore		- allows the user to insert to the state struct its current total score
-*	setFriendlied		- allows the user to flag the states as a part of a frienly states pair
+*	getTotalScore		- returns the total score that a state got at the end 
+*						  of the contest
+*						  as a double
+*	setTotalScore		- allows the user to insert to the state struct its 
+*						  current total score
+*	setFriendlied		- allows the user to flag the states as a part of a
+*						  frienly states pair
 *	isFriendlied		- returns the status of the friendlied flag as bool
 *	stateCopy			- copies an existing state struct
-*	addVoteFromState	- add 1 to the taker states vote counter of the giver state 
-*	removeVoteFromState - removes 1 from the taker states vote counter of the giver state
-*	sumResultsFromState	- sums up the entire raw votes the the state gave into a reachble 10 size array 
+*	addVoteFromState	- add 1 to the taker states vote counter of the giver
+*						  state 
+*	removeVoteFromState - removes 1 from the taker states vote counter of the 
+*						  giver state
+*	sumResultsFromState	- sums up the entire raw votes the the state gave into
+*						  a reachble 10 size array 
 *						  of final results given from this state
 *	getAllResultsFromState 
-*						- returns the final results given from said state size 10 int array
+*						- returns the final results given from said state size 
+*						  10 int array
 *	getResultFromStateToState
-*						- returns the final result given from the giver state to the taker
+*						- returns the final result given from the giver state
+*						  to the taker
 *	getVoteFromStateToState
-*						- returns the raw votes given from the giver state to the taker
+*						- returns the raw votes given from the giver state to 
+*						  the taker
 *	removeAllVotesFromStateToState
-*						- removes all raw votes given from the giver state to the taker
+*						- removes all raw votes given from the giver state to 
+*						  the taker
 	
 */
 typedef struct State_t* State;
@@ -160,8 +170,8 @@ deducts 1 from the vote count for stateTaker in the map of votes of stateGiver
 StateResult removeVoteFromState(State stateGiver, int stateTakerId);
 
 /**
-sums all the raw votes of state into an arrrey of the first 10 hightest scored states
-this array can be found in getAllResultsFromState.
+sums all the raw votes of state into an arrrey of the first 10 hightest scored
+states this array can be found in getAllResultsFromState.
 @param state - state element for whom you want to sum votes into results
 */
 void sumResultsFromState(State state);
@@ -190,7 +200,8 @@ returns the number of raw votes given from stateGiver to StateTaker
 @param stateGiver - state element from whom the result was given
 @param stateTakerId - id of the state to whom the result was given
 @return -
-	NO_VOTES - defined as 0, will be returned if no vote was given to stateTaker
+	NO_VOTES - defined as 0, will be returned if no vote was given to 
+			   stateTaker
 	returns the number of votes otherwise
 */
 int getVoteFromStateToState(State stateGiver, int stateTakerId);
@@ -200,8 +211,10 @@ removes all votes from stateGiver to stateTakerId
 @param stateGiver - state element  whose votes you want to remove 
 @param stateTakerId - id of the state to whom you want to remove votes
 @return -
-	STATE_NULL_ARGUMENT - will be returned if NULL was given as stateGiver or stateTaker
-	STATE_NOT_EXIST - will be returned if no votes were given in the first place
+	STATE_NULL_ARGUMENT - will be returned if NULL was given as stateGiver or 
+						  stateTaker
+	STATE_NOT_EXIST - will be returned if no votes were given in the first 
+					  place
 	returns STATE_SUCCESS otherwise
 */
 StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId);

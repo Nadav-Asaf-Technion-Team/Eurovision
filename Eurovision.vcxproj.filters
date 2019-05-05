@@ -30,9 +30,6 @@
     <ClInclude Include="map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="set.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>

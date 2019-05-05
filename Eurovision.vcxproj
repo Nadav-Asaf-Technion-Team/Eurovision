@@ -24,7 +24,6 @@
     <ClInclude Include="judge.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="map.h" />
-    <ClInclude Include="set.h" />
     <ClInclude Include="state.h" />
   </ItemGroup>
   <ItemGroup>

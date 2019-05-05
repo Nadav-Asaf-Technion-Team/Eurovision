@@ -12,7 +12,8 @@
 *
 * The following functions are available:
 *   eurovisionCreate	- Creates a new empty eurovission struct
-*   eurovisionDestroy	- Deletes an existing eurovision and frees all resources
+*   eurovisionDestroy	- Deletes an existing eurovision and frees all
+*						  resources
 *	eurovisionAddState	- adds a new state to the compatition
 *	eurovisionRemoveState
 *						- removes an existing state from the compatition
@@ -23,14 +24,17 @@
 *	eurovisionRemoveVote
 *						- removes 1 vote from the giver state to the taker
 *	eurovisionRunContest
-*						- runs the entire contest and calculate the score with consideration
-*						  for the persantage given to the audiance score and the judges score
+*						- runs the entire contest and calculate the score with
+*						  consideration
+*						  for the persantage given to the audiance score and
+*						  the judges score
 *	eurovisionRunAudianceFavorite
-*						-  runs the entire contest and calculate the score with consideration
-*						  only for the audiance score
+*						-  runs the entire contest and calculate the score with
+*						  consideration only for the audiance score
 *	eurovisionRunGetFriendlyStates
-*						- runs the entire contest and calculate the score. returns a list of every
-						  pair of states the gave each other the highst score
+*						- runs the entire contest and calculate the score. 
+*						  returns a list of every pair of states the gave each
+*						  other the highst score
 */
 
 typedef enum eurovisionResult_t {
@@ -82,8 +86,10 @@ adds a state to the eurovision contest
 @return -
 	EUROVISION_NULL_ARGUMENT - if one of the pointer arguments given was NULL
 	EUROVISION_INVALID_ID	 - if the state ID given was <0 
-	EUROVISION_INVALID_NAME  - if the name given containd char diffrent than a-z and ' '
-	EUROVISION_STATE_ALREADY_EXIST - if the ID of the state given already exists
+	EUROVISION_INVALID_NAME  - if the name given containd char diffrent than
+							   a-z and ' '
+	EUROVISION_STATE_ALREADY_EXIST - if the ID of the state given already
+									 exists
 	EUROVISION_OUT_OF_MEMORY - if MALLOC failed
 	EUROVISION_SUCCESS - otherwise
 
@@ -100,7 +106,8 @@ remove a state from the eurovision contest
 @return -
 	EUROVISION_NULL_ARGUMENT - if one of the pointer arguments given was NULL
 	EUROVISION_INVALID_ID	 - if the state ID given was <0
-	EUROVISION_STATE_NOT_EXIST - if the ID of the state given does not exists under eurovision
+	EUROVISION_STATE_NOT_EXIST - if the ID of the state given does not exists
+								 under eurovision
 	EUROVISION_OUT_OF_MEMORY - if MALLOC failed
 	EUROVISION_SUCCESS - otherwise
 

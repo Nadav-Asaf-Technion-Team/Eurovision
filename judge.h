@@ -18,7 +18,8 @@
 *   judgeDestroy		- Deletes an existing judge and frees all resources
 *	getJudgeId			- returns the judge ID as an int
 *	getJudgeName		- returns the states name as a char*
-*	getJudgeResults		- returns the final results given from said judge as a size 10 int*
+*	getJudgeResults		- returns the final results given from said judge as a
+*						  size 10 int*
 *	stateCopy			- copies an existing judge struct
 
 */
@@ -34,8 +35,8 @@ typedef enum judgeResult_t {
 Creates a new judge element
 @param judgeId - unique judge ID for the new judge
 @param judgeName - string representing the judges name (not unique)
-@param judgeResults - array of integers containing state IDs, represnting the score
-	the judge had given to those states
+@param judgeResults - array of integers containing state IDs, represnting the
+					  score the judge had given to those states
 @return
 	NULL - if malloc failed
 	else returns the new judge

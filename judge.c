@@ -53,7 +53,8 @@ Judge judgeCopy(Judge judge) {
 	int newId = getJudgeId(judge);
 	const char* newName = getJudgeName(judge);
 	int* newResults = malloc(sizeof(int)*STATES_TO_SCORE);
-	if (copyJudgeResults(newResults, getJudgeResults(judge)) != JUDGE_SUCCESS) return NULL;
+	if (copyJudgeResults(newResults, getJudgeResults(judge)) != JUDGE_SUCCESS)
+		return NULL;
 	Judge newJudge = judgeCreate(newId, newName, newResults);
 	return newJudge;
 }

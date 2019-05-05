@@ -14,7 +14,7 @@ struct State_t {
 	bool friendlied;
 };
 
-//=================================test function=================================
+//=================================test function===============================
 void checkSumResultsAux(State state) {
 	printf("map head is: %d\n", *(int*)mapGetFirst(state->stateVotes));
 	printf("map size is: %d\n", mapGetSize(state->stateVotes));
@@ -33,7 +33,7 @@ Map getVotesFromState(State state) {
 }
 //===============================end of test function=========================
 
-/*===========================implimantation of functions for map======================================*/
+/*===========================implimantation of functions for map=============*/
 /*aiding functions needed for creating a map*/
 
 /** Function to be used by the map for coping int key elements */
@@ -75,7 +75,7 @@ static int compareInts(MapKeyElement n1, MapKeyElement n2) {
 	return (*(int*)n1 - *(int*)n2);
 }
 
-/*===========================end of implimantation======================================*/
+/*===========================end of implimantation===========================*/
 State stateCreate(int stateId, const char* stateName, const char* songName) {
 	State state = malloc(sizeof(*state));
 	if (state == NULL) return NULL;
@@ -83,7 +83,8 @@ State stateCreate(int stateId, const char* stateName, const char* songName) {
 	state->stateId = stateId;
 	state->stateName = stateName;
 	state->songName = songName;
-	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt, freeKeyInt, compareInts);
+	state->stateVotes = mapCreate(copyDataInt, copyKeyInt, freeDataInt,
+								  freeKeyInt, compareInts);
 	if (state->stateVotes == NULL) {
 		stateDestroy(state);
 		return NULL;
@@ -176,7 +177,8 @@ State stateCopy(State state) {
 	Map toDelete = newState->stateVotes;
 	newState->stateVotes = newVotes;
 	mapDestroy(toDelete);
-	if (copyStateResults(newState->stateResults, getAllResultsFromState(state)) != STATE_SUCCESS) {
+	if (copyStateResults(newState->stateResults, getAllResultsFromState(state))
+		!= STATE_SUCCESS) {
 		stateDestroy(newState);
 		return NULL;
 	}
@@ -191,7 +193,8 @@ StateResult addVoteFromState(State stateGiver, int stateTakerId) {
 		current++;
 	}
 	else current = 1;
-	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == MAP_OUT_OF_MEMORY) {
+	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) ==
+		MAP_OUT_OF_MEMORY) {
 
 		return STATE_OUT_OF_MEMORY;
 	}
@@ -205,7 +208,8 @@ StateResult removeVoteFromState(State stateGiver, int stateTakerId) {
 		current--;
 	}
 	else current = 0;
-	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == MAP_OUT_OF_MEMORY) {
+	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == 
+		MAP_OUT_OF_MEMORY) {
 		return STATE_OUT_OF_MEMORY;
 	}
 	return STATE_SUCCESS;
@@ -266,7 +270,7 @@ int getVoteFromStateToState(State stateGiver, int stateTakerId) {
 	return *(int*)votes;
 }
 
-StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId) {
+StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId){
 	MapResult result = mapRemove(stateGiver->stateVotes, &stateTakerId);
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
 	else if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;
