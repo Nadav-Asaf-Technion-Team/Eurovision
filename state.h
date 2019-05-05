@@ -132,7 +132,6 @@ already counted as another state's friend.
 */
 StateResult setFriendlied(State state, bool value);
 
-
 /*
 returns boolean value for field "friendlied", that describes if a state was
 already counted as another state's friend.
@@ -143,7 +142,15 @@ already counted as another state's friend.
 */
 bool isFriendlied(State state);
 
+/**
+copies a given state to an entirely differen state element
+@param state - state to copy
+@return -
+	NULL if NULL was given as state or if a memory error occured
+	the new State element otherwise
+*/
 State stateCopy(State state);
+
 /**
 adds 1 to the vote count for stateTaker in the map of votes of stateGiver
 @param stateGiver - state element from whom you want to give a vote
