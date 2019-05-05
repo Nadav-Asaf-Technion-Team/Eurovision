@@ -192,6 +192,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement){
 	map->size++;
 	return MAP_SUCCESS;
 }
+
 MapDataElement mapGet (Map map, MapKeyElement keyElement){
     if (!(map && keyElement)) return NULL;
 	MapDataElement element = NULL;
