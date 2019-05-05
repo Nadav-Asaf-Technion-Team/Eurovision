@@ -219,6 +219,7 @@ static MapResult nodeRemove (Map map, Node node){
             destroyNode(node, map->freeDataElement, map->freeKeyElement);
             return MAP_SUCCESS;
         }
+		ptr = ptr->next;
     }
     if (!ptr) return MAP_ITEM_DOES_NOT_EXIST;
     return MAP_SUCCESS;
@@ -231,7 +232,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement){
     Node node = searchByKey(map,keyElement);
 	if (!node) return MAP_ITEM_DOES_NOT_EXIST;
 	map->size--;
-    return nodeRemove(map, searchByKey(map, keyElement)) ;
+    return nodeRemove(map, searchByKey(map, keyElement));
 }
 
 //================eurovision patch====================

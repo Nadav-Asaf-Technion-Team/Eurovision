@@ -261,6 +261,7 @@ EurovisionResult eurovisionRemoveState(Eurovision eurovision, int stateId) {
 		}
 		return EUROVISION_SUCCESS;
 	}
+	printf("third list foreach\n");
 	return EUROVISION_SUCCESS; 
 }
 

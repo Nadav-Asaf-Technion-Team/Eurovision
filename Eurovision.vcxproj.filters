@@ -33,9 +33,6 @@
     <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eurovisionTests.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="state.c">
@@ -48,9 +45,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="map.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eurovisionTests.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\tests\main.c">
