@@ -35,12 +35,12 @@ void printAllResults(Eurovision eurovision) {
 	}
 }
 //_______________end oftest functions___________
-
+/*checks if an ID is valid under the given requirements*/
 static bool isIdValid(int id) {
 	if (id < 0) return false;
 	return true;
 }
-
+/*checks if a name is valid under the given requirements*/
 static bool isNameValid(const char* Name) {
 	const char* charCheck = Name;
 	int i = 0;
@@ -52,28 +52,29 @@ static bool isNameValid(const char* Name) {
 	}
 	return true;
 }
-
+/*checks if a state exists in a given list. check by ID for its uniqueness*/
 static bool stateExist(Eurovision eurovision, int stateIdUnderCheck) {
 	LIST_FOREACH(State, currentState, eurovision->statesList) {
 		if (getStateId(currentState) == stateIdUnderCheck) return true;
 	}
 	return false;
 }
-
+/*checks if a judge exists in a given list. check by ID for its uniqueness*/
 static bool judgeExist(Eurovision eurovision, int judgeId) {
 	LIST_FOREACH(Judge, currentJudge, eurovision->judgesList) {
 		if (getJudgeId(currentJudge) == judgeId) return true;
 	}
 	return false;
 }
-
+/*calculetes the final score of a song by sum the audience and judges avarage score
+  taking in acount each givers precentage in the final score*/
 static double calculateTotal(int audiencePercent, double audienceAvarage, double judgesAvarage) {
 	double audiencePart = (double)audiencePercent / 100;
 	double judgesPart = 1 - audiencePart;
 	double result = ((audienceAvarage * audiencePart) + (judgesAvarage * judgesPart));
 	return result;
 }
-
+/* Function to be used by the list for comparing state elements */
 static int compareStatesByScore(State first, State second) {
 	double diff = getTotalScore(second) - getTotalScore(first);
 	if (diff == 0) {
@@ -82,13 +83,14 @@ static int compareStatesByScore(State first, State second) {
 	else if (diff > 0) return 1;
 	else return -1;
 }
-
+/*preformes the summing of results for every state in a given list*/
 static void sumAllResults(Eurovision eurovision) {
 	LIST_FOREACH(State, rankingState, eurovision->statesList) {
 		sumResultsFromState(rankingState);
 	}
 }
-
+/*given two states already known as friendly, creates a concatinated string of their name
+  sorted lexicographicly*/
 static char* createFriendlyString(State firstState, State secondState) {
 	//printf("Entered create string\n");
 	const char* firstName = getStateName(firstState);
@@ -102,10 +104,12 @@ static char* createFriendlyString(State firstState, State secondState) {
 	return friendlyString;
 }
 
+/* Function to be used by the list for freeing string elements */
 static void freeString(char* str) {
 	free(str);
 }
 
+/* Function to be used by the list for coping string elements */
 static char* copyString(char* str) {
 	if (str == NULL) return NULL;
 	char* copy = malloc(strlen(str) + 1);
@@ -113,6 +117,7 @@ static char* copyString(char* str) {
 	return copy ? strcpy(copy, str) : NULL;
 }
 
+/*checks if if an array (in this case of judges results) contains to equal IDs*/
 static bool checkIdDuplicates(int* array) {
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		for (int j = i + 1; j < STATES_TO_SCORE; j++) {
@@ -340,7 +345,8 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 List eurovisionRunAudienceFavorite(Eurovision eurovision) {
 	return eurovisionRunContest(eurovision, 100);
 }
-
+/* resets the iterator of a given list to a given value 
+   to be used in cases of nested or conflicting lists*/
 static void resetIteratorTo(List list, State iterator) {
 	LIST_FOREACH(State, i, list) {
 		if (i == iterator) break;

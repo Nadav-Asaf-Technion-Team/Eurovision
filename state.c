@@ -34,6 +34,9 @@ Map getVotesFromState(State state) {
 //===============================end of test function=========================
 
 /*===========================implimantation of functions for map======================================*/
+/*aiding functions needed for creating a map*/
+
+/** Function to be used by the map for coping int key elements */
 static MapKeyElement copyKeyInt(MapKeyElement n) {
 	if (!n) {
 		return NULL;
@@ -45,7 +48,7 @@ static MapKeyElement copyKeyInt(MapKeyElement n) {
 	*copy = *(int*)n;
 	return copy;
 }
-
+/** Function to be used by the map for coping int data elements */
 static MapDataElement copyDataInt(MapDataElement n) {
 	if (!n) {
 		return NULL;
@@ -58,16 +61,16 @@ static MapDataElement copyDataInt(MapDataElement n) {
 	return copy;
 }
 
-/** Function to be used by the map for freeing elements */
+/** Function to be used by the map for freeing int key elements */
 static void freeKeyInt(MapKeyElement n) {
 	free(n);
 
-}/** Function to be used by the map for freeing elements */
+}/** Function to be used by the map for freeing int data elements */
 static void freeDataInt(MapDataElement n) {
 	free(n);
 }
 
-/** Function to be used by the map for comparing elements */
+/** Function to be used by the map for comparing int key elements */
 static int compareInts(MapKeyElement n1, MapKeyElement n2) {
 	return (*(int*)n1 - *(int*)n2);
 }
@@ -148,6 +151,7 @@ int* getAllResultsFromState(State state) {
 	return state->stateResults;
 }
 
+/*copies the results array values from one array to another*/
 static StateResult copyStateResults(int* destination, int* source) {
 	if (source == NULL || destination == NULL) return STATE_NULL_ARGUMENT;
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {

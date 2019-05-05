@@ -37,7 +37,7 @@ int* getJudgeResults(Judge judge) {
 	if (judge == NULL) return NULL;
 	return judge->judgeResults;
 }
-
+/*copies the result array of a judge from one array to another*/
 static JudgeResult copyJudgeResults(int* destination, int* source) {
 	if (source == NULL || destination == NULL) return JUDGE_NULL_ARGUMENT;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
