@@ -82,9 +82,9 @@ static int compareStatesByScore(State first, State second) {
 	double diff = getTotalScore(second) - getTotalScore(first);
 	if (diff == 0) {
 		return ((getStateId(first) - getStateId(second)) > 0 ? 1 : -1);
-	}
-	else if (diff > 0) return 1;
-	else return -1;
+	} else if (diff > 0) {
+		return 1;
+	} else return -1;
 }
 /*preformes the summing of results for every state in a given list*/
 static void sumAllResults(Eurovision eurovision) {
@@ -123,7 +123,7 @@ static char* copyString(char* str) {
 static bool checkIdDuplicates(int* array) {
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
 		for (int j = i + 1; j < STATES_TO_SCORE; j++) {
-			if (array[i] == array[j])	return true;
+			if (array[i] == array[j]) return true;
 		}
 	}
 	return false;
@@ -155,10 +155,12 @@ EurovisionResult eurovisionAddJudge(Eurovision eurovision, int judgeId,
 	if (checkIdDuplicates(judgeResults)) return EUROVISION_INVALID_ID;
 	if (!isNameValid(judgeName)) return EUROVISION_INVALID_NAME;
 	for (int i = 0; i < STATES_TO_SCORE; i++) {
-		if (!isIdValid(judgeResults[i])) return EUROVISION_INVALID_ID;
-		else if (!stateExist(eurovision, judgeResults[i])) 
-			return EUROVISION_STATE_NOT_EXIST;		
-	}	
+		if (!isIdValid(judgeResults[i])) {
+			return EUROVISION_INVALID_ID;
+		} else if (!stateExist(eurovision, judgeResults[i])) {
+			return EUROVISION_STATE_NOT_EXIST;
+		}
+	}
 	if (judgeExist(eurovision, judgeId)) return EUROVISION_JUDGE_ALREADY_EXIST;
 	int* newResults = malloc(sizeof(int) * STATES_TO_SCORE);
 	if (newResults == NULL) {
@@ -198,7 +200,7 @@ EurovisionResult eurovisionAddState(Eurovision eurovision, int stateId,
 									const char *stateName, 
 									const char *songName) {
 	/*input check*/
-	if (!eurovision || !stateName || !songName)
+	if (!eurovision || !stateName || !songName) 
 		return EUROVISION_NULL_ARGUMENT; 
 	if (!isIdValid(stateId)) return EUROVISION_INVALID_ID;
 	if (!isNameValid(stateName) || !isNameValid(songName))
@@ -383,7 +385,7 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 	char* str = NULL;
 	State secondState = NULL;
 	List friendlyStates = listCreate((CopyListElement)copyString,
-									FreeListElement)freeString);
+									(FreeListElement)freeString);
 	if (friendlyStates == NULL) {
 		eurovisionDestroy(eurovision);
 		return NULL;
@@ -398,10 +400,11 @@ List eurovisionRunGetFriendlyStates(Eurovision eurovision) {
 		resetIteratorTo(eurovision->statesList, currentIterator);
 		if (getResultFromStateToState(secondState, firstStateId) == MAX_RESULT 
 			&& !isFriendlied(secondState) && !isFriendlied(iterator)) {
-			if (strcmp(getStateName(iterator),getStateName(secondState)) < 0)
+			if (strcmp(getStateName(iterator), getStateName(secondState)) < 0) {
 				str = createFriendlyString(iterator, secondState);
-			else 
+			} else {
 				str = createFriendlyString(secondState, iterator);
+			}
 			if (str == NULL) {
 				listDestroy(friendlyStates);
 				eurovisionDestroy(eurovision);

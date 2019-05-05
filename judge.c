@@ -68,8 +68,9 @@ int getResultFromJudge(Judge judge, int stateId) {
 			break;
 		}
 	}
-	if (!in_array) return 0;
-	else {
+	if (!in_array) {
+		return 0;
+	} else {
 		switch (index)
 		{
 		case 0: return 12;

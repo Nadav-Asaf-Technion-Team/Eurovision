@@ -182,12 +182,10 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement){
 	if (current_node == map->head) {
 		new_node->next = current_node;
 		map->head = new_node;
-	}
-	//map reached its final element (or contains only one element)
-	else if (current_node == NULL || previous_node == current_node) {
+	} else if (current_node == NULL || previous_node == current_node) {
+		//map reached its final element (or contains only one element)
 		previous_node->next = new_node;
-	}
-	else {
+	} else {
 		previous_node->next = new_node;
 		new_node->next = current_node;
 	}
@@ -292,8 +290,9 @@ void mapSortByKey(Map map) {
 			if (map->compareKeyElements(node->next->key_element,
 				node->key_element) < 0) {
 				mapBubble(map, node, node->next);
+			} else {
+				node = node->next;
 			}
-			else node = node->next;
 		}
 		iterationSize--;
 	}
@@ -308,8 +307,9 @@ void mapSortByDataForInt(Map map) {
 			if (map->compareKeyElements(node->next->data_element,
 				node->data_element) > 0) {
 				mapBubble(map, node, node->next);
+			} else {
+				node = node->next;
 			}
-			else node = node->next;
 		}
 		iterationSize--;
 	}

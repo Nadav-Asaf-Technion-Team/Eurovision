@@ -192,11 +192,11 @@ StateResult addVoteFromState(State stateGiver, int stateTakerId) {
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current++;
+	} else {
+		current = 1;
 	}
-	else current = 1;
 	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) ==
 		MAP_OUT_OF_MEMORY) {
-
 		return STATE_OUT_OF_MEMORY;
 	}
 	return STATE_SUCCESS;
@@ -207,8 +207,9 @@ StateResult removeVoteFromState(State stateGiver, int stateTakerId) {
 	if (mapGet(stateGiver->stateVotes, &stateTakerId) != NULL) {
 		current = *(int*)mapGet(stateGiver->stateVotes, &stateTakerId);
 		current--;
+	} else {
+		current = 0;
 	}
-	else current = 0;
 	if (mapPut(stateGiver->stateVotes, &stateTakerId, &current) == 
 		MAP_OUT_OF_MEMORY) {
 		return STATE_OUT_OF_MEMORY;
@@ -227,10 +228,13 @@ void sumResultsFromState(State state) {
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
 		int current = *(int*)iterator;
 		int iteratorScore = *(int*)mapGet(state->stateVotes, iterator);
-		if (iteratorScore != 0)
+		if (iteratorScore != 0) {
 			(state->stateResults)[i] = *(int*)iterator;
+		}
 		iterator = mapGetNext(state->stateVotes);
-		if (iterator == NULL) break;
+		if (iterator == NULL) {
+			break;
+		}
 	}
 }
 
@@ -245,8 +249,9 @@ int getResultFromStateToState(State stateGiver, int stateTakerId) {
 			break;
 		}
 	}
-	if (!inArray) return 0;
-	else {
+	if (!inArray) {
+		return 0;
+	} else {
 		switch (index)
 		{
 			case 0: return 12;
@@ -274,6 +279,6 @@ int getVoteFromStateToState(State stateGiver, int stateTakerId) {
 StateResult removeAllVotesFromStateToState(State stateGiver, int stateTakerId){
 	MapResult result = mapRemove(stateGiver->stateVotes, &stateTakerId);
 	if (result == MAP_NULL_ARGUMENT) return STATE_NULL_ARGUMENT;
-	else if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;
+	if (result == MAP_ITEM_DOES_NOT_EXIST) return STATE_NOT_EXIST;
 	return STATE_SUCCESS;
 }
