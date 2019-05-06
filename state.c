@@ -227,7 +227,6 @@ void sumResultsFromState(State state) {
 	mapSortByDataForInt(state->stateVotes);
 	MapKeyElement iterator = mapGetFirst(state->stateVotes);
 	for (int i = 0; i < NUMBER_OF_RESULTS_PER_STATE; i++) {
-		int current = *(int*)iterator;
 		int iteratorScore = *(int*)mapGet(state->stateVotes, iterator);
 		if (iteratorScore != 0) {
 			(state->stateResults)[i] = *(int*)iterator;

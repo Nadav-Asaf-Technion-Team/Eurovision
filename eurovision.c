@@ -1,5 +1,6 @@
 #include "eurovision.h"
-
+#include "judge.h"
+#include "state.h"
 
 #define MAX_RESULT 12
 #define FRIENDLY_SEPERATOR " - "
@@ -362,10 +363,12 @@ List eurovisionRunContest(Eurovision eurovision, int audiencePercent) {
 		}
 		audienceAvarage = (double)audienceTotal /
 						  (double)(listGetSize(eurovision->statesList) - 1);
-		if (listGetSize(eurovision->judgesList) != 0)
-			judgesAvarage = (double)judgesTotal / 
-							(double)listGetSize(eurovision->judgesList);
-		else judgesAvarage = 0;
+		if (listGetSize(eurovision->judgesList) != 0) {
+			judgesAvarage = (double)judgesTotal /
+				(double)listGetSize(eurovision->judgesList);
+		} else {
+			judgesAvarage = 0;
+		}
 		totalStateScore = calculateTotal(audiencePercent, audienceAvarage, 
 										judgesAvarage);
 		setTotalScore(rankedState, totalStateScore);

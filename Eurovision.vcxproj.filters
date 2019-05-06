@@ -27,13 +27,10 @@
     <ClInclude Include="list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eurovisionTests.h">
+    <ClInclude Include="mapForEurovision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +44,10 @@
     <ClCompile Include="judge.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="map.c">
+    <ClCompile Include="..\tests\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="eurovisionTestsMain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eurovisionTests.c">
+    <ClCompile Include="mapForEurovision.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

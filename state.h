@@ -1,7 +1,7 @@
 #ifndef STATE_H_
 #define STATE_H_
 
-#include "map.h"
+#include "mapForEurovision.h" 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
